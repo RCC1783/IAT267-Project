@@ -62,8 +62,8 @@ void loop() {
       break;
     case PLAYMODE:
       {
-        Serial.print("time remaining: ");
-        Serial.println(gameTime + gameTimeMax - millis());
+//        Serial.print("time remaining: ");
+//        Serial.println(gameTime + gameTimeMax - millis());
         if(millis() >= gameTime + gameTimeMax){
 //          Serial.println("Game Over trigger");
           gameState = GAME_END;
@@ -107,11 +107,12 @@ void loop() {
         rodRotator.write(90);
         rodFwdBk.write(90);
 
-//        byte keystroke;
-//        if(Serial.available() > 0){
-//          gameState = PLAYMODE;
-//          gameTime = millis();
-//        }
+        Serial.flush();
+        byte keystroke;
+        if(Serial.available() > 0){
+          gameState = PLAYMODE;
+          gameTime = millis();
+        }
       }
       break;
     default:
@@ -125,7 +126,12 @@ void loop() {
 
 int AnalogInToDegrees180(int analogIn){
   int rotVal = analogRead(analogIn);
-  rotVal = map(rotVal, 0, 1023, 0, 180);
+  Serial.println(rotVal);
+  if(analogIn == ROT_SENSOR_IN){
+    rotVal = map(rotVal, 200, 1023, 0, 180);
+  }else{
+    rotVal = map(rotVal, 0, 1023, 0, 180);
+  }
   
   return rotVal;
 }
