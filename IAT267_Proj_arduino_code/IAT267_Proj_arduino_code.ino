@@ -1,5 +1,5 @@
 #include <Servo.h>
-//#include <SparkFun_TB6612.h>
+#include <ColorPAL.h>
 
 enum analogInPins {ROT_SENSOR_IN = 0, FWD_BCK_SLIDER_IN = 1, WGHT_SENSOR_IN = 2, CLR_SENSOR_IN = 3};
 enum analogOutPins {ROD_ROTATOR_OUT = 11, ROD_MOVER_OUT = 10};
