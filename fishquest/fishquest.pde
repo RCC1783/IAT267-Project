@@ -10,7 +10,7 @@ final int GAME_END = 2;
 int gameState = GAME_TITLE; // Begin gamestate at game title screen
 int gameTimeMax = 60000;    // Max play time in ms
 int gameTimeStart = 0;      // Time of game start
-int time = 60000;           // Time remaining, starts at 60s
+int time = 0;               // Time remaining
 int score = 0;              // Player score
 
 void setup() 
@@ -45,7 +45,7 @@ void gameTitle()
   background(0);
   textSize(100);
   text("Welcome", width/2, height/2); // Display Title screen
-  
+
   /* if (myPort.available() > 0) 
   {
     gameState = PLAYMODE;   // Start game if signal received from arduino
@@ -56,11 +56,12 @@ void gameTitle()
 
 void playMode() 
 {
+
   background(0);
-  text("" + time/1000, width/2, height/4);  // Show time remaining in seconds
-  text("" + score, width/2, height/2);      // Show score in screen centre
+  text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
+  text("" + score, width/2, height/2);                      // Show score in screen centre
   
-  time = gameTimeStart - millis();          // total time in play mode
+  time = millis() - gameTimeStart;          // total time in play mode
   
   if (time >= gameTimeMax) 
   {
@@ -79,8 +80,8 @@ void gameEnd()
   background(0);
   text("Thanks for playing!", width/2, height/4);
   text("" + score, width/2, height/2);
-  delay(5000); // wait 5 seconds before going back to start screen
-  gameState = GAME_TITLE;
+
+  //gameState = GAME_TITLE;
 }
 
 void mouseClicked() 
@@ -89,11 +90,13 @@ void mouseClicked()
   {
     case GAME_TITLE :
       gameState = PLAYMODE;
-    
+      gameTimeStart = millis();
+      break;
     case PLAYMODE : 
       score++;
-      
+      break;
     case GAME_END : 
       gameState = GAME_TITLE;
+      break;
   }
 }
