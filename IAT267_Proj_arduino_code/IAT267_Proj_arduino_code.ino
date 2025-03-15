@@ -173,7 +173,7 @@ void ReelController(){
     }
   }
   else if(lineReelDown == false && reelTime < REEL_TIME_MAX){
-//    Serial.println("reelingUp");
+//    Serial.println("reelinscmhnv hbdfmvbdfkjbvgUp");
     reelTime++;
     
     //Spin Counter-Clockwise at speed 150
