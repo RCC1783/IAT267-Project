@@ -1,12 +1,13 @@
 #include <Servo.h>
 #include <ColorPAL.h>
 
-enum analogInPins {ROT_SENSOR_IN = 0, FWD_BCK_SLIDER_IN = 1, WGHT_SENSOR_IN = 2, CLR_SENSOR_IN = 3};
+enum analogInPins {ROT_SENSOR_IN = 0, FWD_BCK_SLIDER_IN = 1, WGHT_SENSOR_IN = 2};
 enum analogOutPins {ROD_ROTATOR_OUT = 11, ROD_MOVER_OUT = 10};
 
 
 //Digital 
 const int REEL_BUTTON_PIN = 2; //reel in/out button (digital)
+const int CLR_SENSOR_IN = 12;
 
 //Pins for the DC motor
 const int REEL_MOTOR_AI1 = 4; //direction control 1 (digital)
@@ -16,6 +17,8 @@ const int REEL_MOTOR_PWMA = 3; //speed of motor (analog)
 
 Servo rodRotator;
 Servo rodFwdBk;
+
+ColorPAL clrSensor;
 
 bool lineReelDown = true;
 int reelTime = 0;
@@ -39,6 +42,8 @@ void setup() {
 
   rodRotator.attach(ROD_ROTATOR_OUT);
   rodFwdBk.attach(ROD_MOVER_OUT);
+
+  clrSensor.attachPAL(CLR_SENSOR_IN);
 
   pinMode(REEL_BUTTON_PIN, INPUT);
   pinMode(REEL_MOTOR_AI1, OUTPUT);
@@ -78,6 +83,10 @@ void loop() {
         rodFwdBk.write(AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
   
         ReelController();
+
+        int r = clrSensor.redPAL();
+        int g = clrSensor.greenPAL();
+        int b = clrSensor.bluesPAL();
   
         delay(15);
       }
