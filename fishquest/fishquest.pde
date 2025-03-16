@@ -12,6 +12,7 @@ int gameTimeMax = 60000;    // Max play time in ms
 int gameTimeStart = 0;      // Time of game start
 int time = 0;               // Time remaining
 int score = 0;              // Player score
+int timeCountDown = 10 * 60; // Start count down after the game ends and starts the game again
 
 void setup() 
 {
@@ -80,6 +81,7 @@ void gameEnd()
   background(0);
   text("Thanks for playing!", width/2, height/4);
   text("" + score, width/2, height/2);
+  reStart();
 
   //gameState = GAME_TITLE;
 }
@@ -98,5 +100,13 @@ void mouseClicked()
     case GAME_END : 
       gameState = GAME_TITLE;
       break;
+  }
+}
+
+void reStart() {
+  println(timeCountDown = timeCountDown - 1, "countdown is working");
+  if (timeCountDown <= 0) {
+    gameState = GAME_TITLE;
+    timeCountDown = 10*60;
   }
 }
