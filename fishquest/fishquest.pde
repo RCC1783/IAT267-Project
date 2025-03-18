@@ -14,7 +14,7 @@ Intro in;
 boolean spacePressed = false;
 
 int gameState = GAME_TITLE; // Begin gamestate at game title screen
-int gameTimeMax = 60000;    // Max play time in ms
+int gameTimeMax = 2000;    // Max play time in ms
 int gameTimeStart = 0;      // Time of game start
 int time = 0;               // Time remaining
 int score = 0;              // Player score
@@ -35,19 +35,11 @@ void draw()
   {   
     case GAME_TITLE :
       gameTitle();
-      if (key == ' ' && !spacePressed) {
-        spacePressed = true;
-        gameState = GAMEINSTRUCTION;
-      }
     break;
     
     case GAMEINSTRUCTION :
       displayHowToPlayScreen();
       gameTimeStart = millis();
-      if (key == ' ' && !spacePressed) {
-        spacePressed = true;
-        gameState = PLAYMODE;
-      }
     break;
        
     case PLAYMODE :
@@ -56,16 +48,15 @@ void draw()
     
     case GAME_END :
       gameEnd();
-    break;
-    
+    break;    
   }
-
 }
 
 void gameTitle() 
 {
   //background(0);
   displayStartScreen();
+  score = 0;
   
   /* if (myPort.available() > 0) 
   {
@@ -77,7 +68,7 @@ void gameTitle()
 
 void playMode() 
 {
-  background(0);
+  background(160,214,217);
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
   text("" + score, width/2, height/2);                      // Show score in screen centre
   
@@ -96,18 +87,25 @@ void playMode()
 
 void gameEnd()
 {
-  background(0);
-  text("Thanks for playing!", width/2, height/4);
-  text("" + score, width/2, height/2);
+  background(160,214,217);
+  fill(255);
+  if(score <= 2) {
+    text("Hm... Your score is  ", width/3, height/4);
+  } else if (score >= 3) {
+    text("Yay! Your score is ", width/3, height/4);
+  }
+  text(score, width/2, height/2);
   reStart();
 }
 
 void reStart() {
   println(timeCountDown = timeCountDown - 1, "countdown is working");
+  text("Going back to the main screen in " + timeCountDown/50, width/3, height/2+ 100);
+  text("Click on screen to go back now", width/3, height/2 + 150);
   if (timeCountDown <= 0) {
-    gameState = GAME_TITLE;
-    timeCountDown = 10*60;
-  }
+    gameState = GAME_TITLE;    
+    timeCountDown = 10 *60;
+  } 
 }
 
 void displayStartScreen() {
@@ -115,12 +113,12 @@ void displayStartScreen() {
   textSize(100);
   text("Welcome", width/2-150, height/2); // Display Title screen
   textSize(40);
-  text("Press 'Space' or click on screen to Start", width/4.5,height/2+300);
+  text("Click on screen to Start", width/3,height/2+300);
 }
 
 void displayHowToPlayScreen(){
   in.drawMe();
   textSize(40);
   text("This game is about ... ", width/8,height/2-80);
-  text("Press 'Space' or click on screen to start timer ", width/8,height/2);  
+  text("Click on screen to start timer ", width/8,height/2);  
 }

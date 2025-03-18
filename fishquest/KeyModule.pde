@@ -1,8 +1,3 @@
-void keyPressed() {
-  if(key == ' ') {
-    spacePressed = false;
-  }
-}
 void mouseClicked() 
 {
   switch (gameState) 
@@ -18,6 +13,7 @@ void mouseClicked()
       break;
     case GAME_END : 
       gameState = GAME_TITLE;
+      timeCountDown = 10 *60;
       break;
   }
 }
