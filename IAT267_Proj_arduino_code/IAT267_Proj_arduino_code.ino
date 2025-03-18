@@ -57,7 +57,7 @@ void setup() {
 }
 
 void loop() {
-  if(Serial.avilable() > 0){
+  if(Serial.available() > 0){
     gameState = Serial.parseInt();
   }
   switch (gameState){
@@ -70,9 +70,16 @@ void loop() {
 //        }
           if(digitalRead(REEL_BUTTON_PIN) == HIGH){
             Serial.println("1&");
+            gameState = PLAYMODE;
           }
       }
       break;
+    case 3:
+      {
+        if(digitalRead(REEL_BUTTON_PIN) == HIGH){
+            Serial.println("1&");
+          }
+      }
     case PLAYMODE:
       {
 //        Serial.print("time remaining: ");
@@ -85,7 +92,7 @@ void loop() {
   //        }
         }
         int force = analogRead(WGHT_SENSOR_IN);
-        Serial.println(force);
+//        Serial.println(force);
         
 //        Serial.println(ROT_SENSOR_IN);
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));
@@ -97,21 +104,7 @@ void loop() {
         int g = clrSensor.greenPAL();
         int b = clrSensor.bluePAL();
 
-        Serial.print("C");
-        Serial.print("R");
-        Serial.print(r);
-        Serial.print("R");
-        Serial.print("G");
-        Serial.print(g);
-        Serial.print("G");
-        Serial.print("B");
-        Serial.print(b);
-        Serial.print("B");
-        Serial.print("C");
-        Serial.print("W");
-        Serial.print(force);
-        Serial.print("W");
-        Serial.println("&");
+        printToSerial(r, g, b, force);
   
 //        delay(15);
       }
@@ -156,6 +149,24 @@ void loop() {
       }
   }
   delay(10);
+}
+
+void printToSerial(int r, int g, int b, int force){
+  Serial.print("C");
+  Serial.print("R");
+  Serial.print(r);
+  Serial.print("R");
+  Serial.print("G");
+  Serial.print(g);
+  Serial.print("G");
+  Serial.print("B");
+  Serial.print(b);
+  Serial.print("B");
+  Serial.print("C");
+  Serial.print("W");
+  Serial.print(force);
+  Serial.print("W");
+  Serial.println("&");
 }
 
 int AnalogInToDegrees180(int analogIn){
