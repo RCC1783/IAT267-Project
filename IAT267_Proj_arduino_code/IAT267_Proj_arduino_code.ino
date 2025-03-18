@@ -1,7 +1,7 @@
 #include <Servo.h>
 #include <ColorPAL.h>
 
-enum analogInPins {ROT_SENSOR_IN = 0, FWD_BCK_SLIDER_IN = 1, WGHT_SENSOR_IN = 2};
+enum analogInPins {ROT_SENSOR_IN = A0, FWD_BCK_SLIDER_IN = A1, WGHT_SENSOR_IN = A2};
 enum analogOutPins {ROD_ROTATOR_OUT = 11, ROD_MOVER_OUT = 10};
 
 
@@ -14,6 +14,8 @@ const int REEL_MOTOR_AI1 = 4; //direction control 1 (digital)
 const int REEL_MOTOR_AI2 = 7; //direction control 2 (digital)
 const int REEL_MOTOR_STBY = 8; //standby mode control (digital)
 const int REEL_MOTOR_PWMA = 3; //speed of motor (analog)
+
+// CR##G##B##CW###W&
 
 Servo rodRotator;
 Servo rodFwdBk;
@@ -55,30 +57,44 @@ void setup() {
 }
 
 void loop() {
+  if(Serial.available() > 0){
+    gameState = Serial.parseInt();
+  }
   switch (gameState){
     case GAME_TITLE:
       {
-        byte keystroke;
-        if(Serial.available() > 0){
-          gameState = PLAYMODE;
-          gameTime = millis();
-        }
+//        byte keystroke;
+//        if(Serial.available() > 0){
+//          gameState = PLAYMODE;
+//          gameTime = millis();
+//        }
+          if(digitalRead(REEL_BUTTON_PIN) == HIGH){
+            Serial.println("1&");
+            gameState = PLAYMODE;
+          }
       }
       break;
+    case 3:
+      {
+        if(digitalRead(REEL_BUTTON_PIN) == HIGH){
+            Serial.println("1&");
+          }
+      }
     case PLAYMODE:
       {
 //        Serial.print("time remaining: ");
 //        Serial.println(gameTime + gameTimeMax - millis());
         if(millis() >= gameTime + gameTimeMax){
 //          Serial.println("Game Over trigger");
-          gameState = GAME_END;
+//          gameState = GAME_END;
   //        if(lineReelDown == true){
   //          reelTime = 0;
   //        }
         }
         int force = analogRead(WGHT_SENSOR_IN);
-//        Serial.write(force);
+//        Serial.println(force);
         
+//        Serial.println(ROT_SENSOR_IN);
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));
         rodFwdBk.write(AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
   
@@ -86,14 +102,16 @@ void loop() {
 
         int r = clrSensor.redPAL();
         int g = clrSensor.greenPAL();
-        int b = clrSensor.bluesPAL();
+        int b = clrSensor.bluePAL();
+
+        printToSerial(r, g, b, force);
   
-        delay(15);
+//        delay(15);
       }
       break;
     case GAME_END:
       {
-        Serial.println("end");
+//        Serial.println("end");
         // raise the line back up
         if(lineReelDown == false && reelTime < REEL_TIME_MAX){
 //          Serial.println("reelingUp");
@@ -119,23 +137,41 @@ void loop() {
         Serial.flush();
         byte keystroke;
         if(Serial.available() > 0){
-          gameState = PLAYMODE;
-          gameTime = millis();
+//          gameState = PLAYMODE;
+//          gameTime = millis();
         }
       }
       break;
     default:
       {
-        Serial.println("default");
+//        Serial.println("default");
         delay(10);
       }
   }
-  delay(15);
+  delay(10);
+}
+
+void printToSerial(int r, int g, int b, int force){
+  Serial.print("C");
+  Serial.print("R");
+  Serial.print(r);
+  Serial.print("R");
+  Serial.print("G");
+  Serial.print(g);
+  Serial.print("G");
+  Serial.print("B");
+  Serial.print(b);
+  Serial.print("B");
+  Serial.print("C");
+  Serial.print("W");
+  Serial.print(force);
+  Serial.print("W");
+  Serial.println("&");
 }
 
 int AnalogInToDegrees180(int analogIn){
   int rotVal = analogRead(analogIn);
-  Serial.println(rotVal);
+//  Serial.println(rotVal);
   if(analogIn == ROT_SENSOR_IN){
     rotVal = map(rotVal, 200, 1023, 0, 180);
   }else{
