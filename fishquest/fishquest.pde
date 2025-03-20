@@ -1,4 +1,5 @@
 import processing.serial.*;
+import ddf.minim.*;
 //Serial myPort; // serial port object
 //String[] portList = Serial.list();
 //final int PORT_NUM = 0;
@@ -10,8 +11,14 @@ final int GAMEINSTRUCTION = 3;
 
 StartScreen ss;
 Intro in;
+Minim minim;
+AudioPlayer backSound;
+
 
 boolean spacePressed = false;
+ArrayList<Fish> fish = new ArrayList<Fish>();
+PImage fishImg;
+PImage reversedFishImg;
 
 int gameState = GAME_TITLE; // Begin gamestate at game title screen
 int gameTimeMax = 2000;    // Max play time in ms
@@ -19,18 +26,23 @@ int gameTimeStart = 0;      // Time of game start
 int time = 0;               // Time remaining
 int score = 0;              // Player score
 int timeCountDown = 10 * 60; // Start count down after the game ends and starts the game again
+int numberFish = 5;
 
 void setup() 
 {
-size(1000, 716);   
-ss = new StartScreen(loadImage("start.png"));
-in = new Intro(loadImage("intro.png"));
+size(1000, 716);  
+loadAssets();
+for (int i = 0; i < numberFish; i ++) {
+  fish.add(new Fish(new PVector(random(width),random(50, 650)), new PVector(random(-6,-1),0), fishImg, random(1,3)));  
+}
+
 //myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
 
 }
 
 void draw() 
 {
+  
   switch (gameState) 
   {   
     case GAME_TITLE :
@@ -78,6 +90,7 @@ void playMode()
     gameState = GAME_END;
   }
   
+  
   /*if (myPort.available() > 0) 
   {
     score++;                // Increment score if signal received from arduino
@@ -90,9 +103,11 @@ void gameEnd()
   background(160,214,217);
   fill(255);
   if(score <= 2) {
-    text("Hm... Your score is  ", width/3, height/4);
+    text("Hm...", width/3, height/4);
+    text("Your score is", width/3, height/4+50);
   } else if (score >= 3) {
-    text("Yay! Your score is ", width/3, height/4);
+    text("Yahoooo! ", width/3, height/4);
+    text("Your score is", width/3, height/4+50);
   }
   text(score, width/2, height/2);
   reStart();
@@ -110,6 +125,10 @@ void reStart() {
 
 void displayStartScreen() {
   ss.drawMe();
+  spawnFish();
+  textSize(100);
+  PFont font = loadFont("Skia-Regular_Black-Condensed-48.vlw");
+  textFont(font);
   textSize(100);
   text("Welcome", width/2-150, height/2); // Display Title screen
   textSize(40);
@@ -120,5 +139,23 @@ void displayHowToPlayScreen(){
   in.drawMe();
   textSize(40);
   text("This game is about ... ", width/8,height/2-80);
-  text("Click on screen to start timer ", width/8,height/2);  
+  text("Click on screen to start timer ", width/8,height/2); 
+  spawnFish();
+}
+
+void loadAssets() {
+  fishImg = loadImage("fish.png");
+  reversedFishImg = loadImage("reversedFish.png");
+  ss = new StartScreen(loadImage("start.png"));
+  in = new Intro(loadImage("intro.png"));
+  minim = new Minim(this);
+  backSound = minim.loadFile("backSound.mp3");
+  backSound.loop();
+}
+
+void spawnFish() {
+  for (int i = 0; i < fish.size(); i++) {
+    Fish fishes = fish.get(i);
+    fishes.update();
+  }
 }
