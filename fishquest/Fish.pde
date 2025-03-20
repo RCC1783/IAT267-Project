@@ -19,6 +19,7 @@ class Fish {
     move();
     handleWall();
   }
+  
   void drawMe() {
     pushMatrix() ;
     if (vel.x < 0) {
@@ -30,7 +31,6 @@ class Fish {
       image(img, 0,0,xWidth*scale,xHeight*scale);
     }
     popMatrix();
-    
   }
   
   void move() {

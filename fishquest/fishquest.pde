@@ -12,8 +12,7 @@ final int GAMEINSTRUCTION = 3;
 StartScreen ss;
 Intro in;
 Minim minim;
-AudioPlayer backSound;
-
+AudioPlayer backSound, click;
 
 boolean spacePressed = false;
 ArrayList<Fish> fish = new ArrayList<Fish>();
@@ -26,7 +25,7 @@ int gameTimeStart = 0;      // Time of game start
 int time = 0;               // Time remaining
 int score = 0;              // Player score
 int timeCountDown = 10 * 60; // Start count down after the game ends and starts the game again
-int numberFish = 5;
+int numberFish = 5; // Number of the fish
 
 void setup() 
 {
@@ -151,6 +150,7 @@ void loadAssets() {
   minim = new Minim(this);
   backSound = minim.loadFile("backSound.mp3");
   backSound.loop();
+  click = minim.loadFile("click.mp3");
 }
 
 void spawnFish() {

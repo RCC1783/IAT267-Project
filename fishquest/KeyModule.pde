@@ -1,5 +1,6 @@
 void mouseClicked() 
 {
+  click.play(0);
   switch (gameState) 
   {
     case GAME_TITLE :
