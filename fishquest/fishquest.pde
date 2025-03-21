@@ -18,6 +18,7 @@ boolean spacePressed = false;
 ArrayList<Fish> fish = new ArrayList<Fish>();
 PImage fishImg;
 PImage deadFishImg;
+PImage winFishImg;
 
 int gameState = GAME_TITLE; // Begin gamestate at game title screen
 int gameTimeMax = 60000;    // Max play time in ms
@@ -104,19 +105,20 @@ void gameEnd()
   if(score <= 2) {
     ifLose();
     text("Hm...", width/3, height/4);
-    text("Your score is", width/3, height/4+50);
+    text("Your score is " + score, width/3, height/4+60);
   } else if (score >= 3) {
-    text("Yahoooo! ", width/3, height/4);
-    text("Your score is", width/3, height/4+50);
+    ifWin();
+    text("Yahoooo! Get some sushi ??", width/3-30, height/4);
+    text("Your score is " + score, width/3+30, height/4+60);
   }
-  text(score, width/2, height/2);
+  //text(score, width/2, height/2);
   reStart();
 }
 
 void reStart() {
   println(timeCountDown = timeCountDown - 1, "countdown is working");
-  text("Going back to the main screen in " + timeCountDown/50, width/3, height/2+ 100);
-  text("Click on screen to go back now", width/3, height/2 + 150);
+  text("Going back to the main screen in " + timeCountDown/50, width/3-80, height/2+ 100);
+  text("Click on screen to go back now", width/3-50, height/2 + 150);
   if (timeCountDown <= 0) {
     gameState = GAME_TITLE;    
     timeCountDown = 10 *60;
@@ -146,6 +148,7 @@ void displayHowToPlayScreen(){
 void loadAssets() {
   fishImg = loadImage("fish.png");
   deadFishImg = loadImage("dead.png");
+  winFishImg = loadImage("winFish.png");
   ss = new StartScreen(loadImage("start.png"));
   in = new Intro(loadImage("intro.png"));
   minim = new Minim(this);
@@ -163,5 +166,10 @@ void spawnFish() {
 
 void ifLose() {
   background(233);
-  image(deadFishImg, width/2,height/2, 180,65);
+  image(deadFishImg, width/2 -40,height/2-20, 180,65);
+}
+
+void ifWin() {
+  background(147, 194, 245);
+  image(winFishImg, width/2 -40,height/2-60, 100,108);
 }
