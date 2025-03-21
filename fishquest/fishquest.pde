@@ -1,10 +1,6 @@
 import processing.serial.*;
-<<<<<<< Updated upstream
 import ddf.minim.*;
-//Serial myPort; // serial port object
-//String[] portList = Serial.list();
-//final int PORT_NUM = 0;
-=======
+
 final int PORT_NUM = 0;
 byte[] inBuffer = new byte[255];   // buffer of fish
 Serial myPort;                     // serial port object
@@ -14,7 +10,6 @@ String myString;                   // buffer string
 String[] f;                        // fish packet
 String[] c;                        // fish color
 String[] w;                        // fish weight
->>>>>>> Stashed changes
 
 final int GAME_TITLE = 0;
 final int PLAYMODE = 1;
@@ -26,7 +21,6 @@ Intro in;
 Minim minim;
 AudioPlayer backSound, click;
 
-<<<<<<< Updated upstream
 boolean spacePressed = false;
 ArrayList<Fish> fish = new ArrayList<Fish>();
 PImage fishImg;
@@ -37,42 +31,36 @@ int gameTimeMax = 2000;    // Max play time in ms
 int gameTimeStart = 0;      // Time of game start
 int time = 0;               // Time remaining
 int score = 0;              // Player score
-=======
+
 int gameState = GAME_TITLE;  // Begin gamestate at game title screen
 final int GAME_TIME_MAX = 60000;     // Max play time in ms
 int gameTimeStart;       // Time of game start
 int time;                // Time remaining
 int score = 0;               // Player score
->>>>>>> Stashed changes
+
 int timeCountDown = 10 * 60; // Start count down after the game ends and starts the game again
 int numberFish = 5; // Number of the fish
 
 void setup() 
 {
-<<<<<<< Updated upstream
+
 size(1000, 716);  
 loadAssets();
 for (int i = 0; i < numberFish; i ++) {
   fish.add(new Fish(new PVector(random(width),random(50, 650)), new PVector(random(-6,-1),0), fishImg, random(1,3)));  
 }
-
-//myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
-
-=======
-size(1000, 716);   
+  
 ss = new StartScreen(loadImage("start.png"));
 in = new Intro(loadImage("intro.png"));
 myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
->>>>>>> Stashed changes
+
 }
 
 void draw() 
 {
-<<<<<<< Updated upstream
-=======
+
   myPort.write(gameState); // Send current game state to Arduino
->>>>>>> Stashed changes
-  
+ 
   switch (gameState) 
   {  
     case GAME_TITLE :
@@ -115,16 +103,7 @@ void playMode()
   {
     gameState = GAME_END;
   }
-<<<<<<< Updated upstream
-  
-  
-  /*if (myPort.available() > 0) 
-  {
-    score++;                // Increment score if signal received from arduino
-    myPort.clear();         // Clear port buffer
-  }*/
-=======
->>>>>>> Stashed changes
+ 
 }
 
 void gameEnd()
@@ -231,25 +210,28 @@ void checkBuffer()
        
     case PLAYMODE :
     // Check info received about fish
-    switch (w[0]) // Check weight
-    {
-      case "S" :
+    int weight = Integer.parseInt(w[0]);
+      
+      // small
+      if (weight <= 10) 
+      {
         score += 1;
-      break;
-        
-      case "M" :
+      }
+      // medium
+      else if (weight > 10 && weight <= 20) 
+      {
         score += 2;
-      break;
-      
-      case "L" :
+      }  
+      // large
+      else if (weight > 20)
+      {
         score += 3;
-      break;  
-      
-      default :
+      } 
+      else
+      {
         println("No change to score from weight");
-      break;
-    }
-    break;
+      }
+    
     
     case GAME_END :
       if (f[0] == "0") 
