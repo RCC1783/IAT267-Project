@@ -20,7 +20,7 @@ PImage fishImg;
 PImage deadFishImg;
 
 int gameState = GAME_TITLE; // Begin gamestate at game title screen
-int gameTimeMax = 2000;    // Max play time in ms
+int gameTimeMax = 60000;    // Max play time in ms
 int gameTimeStart = 0;      // Time of game start
 int time = 0;               // Time remaining
 int score = 0;              // Player score

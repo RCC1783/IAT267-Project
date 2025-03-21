@@ -1,3 +1,5 @@
+//Include a delay from when the weight/colour is first measured to get a more accurate reading
+
 #include <Servo.h>
 #include <ColorPAL.h>
 
@@ -60,12 +62,13 @@ void loop() {
   if(Serial.available() > 0){
     gameState = Serial.parseInt();
   }
+  
   switch (gameState){
     case GAME_TITLE:
       {
           if(digitalRead(REEL_BUTTON_PIN) == HIGH){
             Serial.println("3&");
-            gameState = PLAYMODE;
+            gameState = 3;
           }
       }
       break;
@@ -73,19 +76,11 @@ void loop() {
       {
         if(digitalRead(REEL_BUTTON_PIN) == HIGH){
             Serial.println("1&");
+            gameState = 1;
           }
       }
     case PLAYMODE:
       {
-//        Serial.print("time remaining: ");
-//        Serial.println(gameTime + gameTimeMax - millis());
-        if(millis() >= gameTime + gameTimeMax){
-//          Serial.println("Game Over trigger");
-//          gameState = GAME_END;
-  //        if(lineReelDown == true){
-  //          reelTime = 0;
-  //        }
-        }
         int force = analogRead(WGHT_SENSOR_IN);
 //        Serial.println(force);
         
@@ -129,7 +124,7 @@ void loop() {
         rodRotator.write(90);
         rodFwdBk.write(90);
 
-        Serial.flush();
+//        Serial.flush();
         byte keystroke;
         if(Serial.available() > 0){
 //          gameState = PLAYMODE;
