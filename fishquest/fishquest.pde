@@ -18,8 +18,8 @@ final int GAMEINSTRUCTION = 3;
 
 StartScreen ss;
 Intro in;
-Minim minim;
-AudioPlayer backSound, click;
+//Minim minim;
+//AudioPlayer backSound, click;
 
 boolean spacePressed = false;
 ArrayList<Fish> fish = new ArrayList<Fish>();
@@ -31,12 +31,6 @@ int gameTimeMax = 2000;    // Max play time in ms
 int gameTimeStart = 0;      // Time of game start
 int time = 0;               // Time remaining
 int score = 0;              // Player score
-
-int gameState = GAME_TITLE;  // Begin gamestate at game title screen
-final int GAME_TIME_MAX = 60000;     // Max play time in ms
-int gameTimeStart;       // Time of game start
-int time;                // Time remaining
-int score = 0;               // Player score
 
 int timeCountDown = 10 * 60; // Start count down after the game ends and starts the game again
 int numberFish = 5; // Number of the fish
@@ -93,13 +87,13 @@ void playMode()
 {
   myPort.write(PLAYMODE);
   background(160,214,217);
-  text("" + (GAME_TIME_MAX - time)/1000, width/2, height/4);  // Show time remaining in seconds
+  text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
   text("" + score, width/2, height/2);                      // Show score in screen centre
   
   checkBuffer();
   
   time = millis() - gameTimeStart;          // total time in play mode 
-  if (time >= GAME_TIME_MAX) 
+  if (time >= gameTimeMax) 
   {
     gameState = GAME_END;
   }
@@ -161,10 +155,10 @@ void loadAssets() {
   reversedFishImg = loadImage("reversedFish.png");
   ss = new StartScreen(loadImage("start.png"));
   in = new Intro(loadImage("intro.png"));
-  minim = new Minim(this);
-  backSound = minim.loadFile("backSound.mp3");
-  backSound.loop();
-  click = minim.loadFile("click.mp3");
+  //minim = new Minim(this);
+  //backSound = minim.loadFile("backSound.mp3");
+  //backSound.loop();
+ // click = minim.loadFile("click.mp3");
 }
 
 void spawnFish() {
