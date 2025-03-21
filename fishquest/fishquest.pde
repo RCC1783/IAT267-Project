@@ -1,8 +1,20 @@
 import processing.serial.*;
+<<<<<<< Updated upstream
 import ddf.minim.*;
 //Serial myPort; // serial port object
 //String[] portList = Serial.list();
 //final int PORT_NUM = 0;
+=======
+final int PORT_NUM = 0;
+byte[] inBuffer = new byte[255];   // buffer of fish
+Serial myPort;                     // serial port object
+String[] portList = Serial.list();
+
+String myString;                   // buffer string
+String[] f;                        // fish packet
+String[] c;                        // fish color
+String[] w;                        // fish weight
+>>>>>>> Stashed changes
 
 final int GAME_TITLE = 0;
 final int PLAYMODE = 1;
@@ -14,6 +26,7 @@ Intro in;
 Minim minim;
 AudioPlayer backSound, click;
 
+<<<<<<< Updated upstream
 boolean spacePressed = false;
 ArrayList<Fish> fish = new ArrayList<Fish>();
 PImage fishImg;
@@ -24,11 +37,19 @@ int gameTimeMax = 2000;    // Max play time in ms
 int gameTimeStart = 0;      // Time of game start
 int time = 0;               // Time remaining
 int score = 0;              // Player score
+=======
+int gameState = GAME_TITLE;  // Begin gamestate at game title screen
+final int GAME_TIME_MAX = 60000;     // Max play time in ms
+int gameTimeStart;       // Time of game start
+int time;                // Time remaining
+int score = 0;               // Player score
+>>>>>>> Stashed changes
 int timeCountDown = 10 * 60; // Start count down after the game ends and starts the game again
 int numberFish = 5; // Number of the fish
 
 void setup() 
 {
+<<<<<<< Updated upstream
 size(1000, 716);  
 loadAssets();
 for (int i = 0; i < numberFish; i ++) {
@@ -37,13 +58,23 @@ for (int i = 0; i < numberFish; i ++) {
 
 //myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
 
+=======
+size(1000, 716);   
+ss = new StartScreen(loadImage("start.png"));
+in = new Intro(loadImage("intro.png"));
+myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
+>>>>>>> Stashed changes
 }
 
 void draw() 
 {
+<<<<<<< Updated upstream
+=======
+  myPort.write(gameState); // Send current game state to Arduino
+>>>>>>> Stashed changes
   
   switch (gameState) 
-  {   
+  {  
     case GAME_TITLE :
       gameTitle();
     break;
@@ -65,29 +96,26 @@ void draw()
 
 void gameTitle() 
 {
-  //background(0);
+  myPort.write(GAME_TITLE);
   displayStartScreen();
   score = 0;
-  
-  /* if (myPort.available() > 0) 
-  {
-    gameState = PLAYMODE;   // Start game if signal received from arduino
-    myPort.clear();         // Clear port buffer
-    gameTimeStart = millis();
-  } */
 }
 
 void playMode() 
 {
+  myPort.write(PLAYMODE);
   background(160,214,217);
-  text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
+  text("" + (GAME_TIME_MAX - time)/1000, width/2, height/4);  // Show time remaining in seconds
   text("" + score, width/2, height/2);                      // Show score in screen centre
   
+  checkBuffer();
+  
   time = millis() - gameTimeStart;          // total time in play mode 
-  if (time >= gameTimeMax) 
+  if (time >= GAME_TIME_MAX) 
   {
     gameState = GAME_END;
   }
+<<<<<<< Updated upstream
   
   
   /*if (myPort.available() > 0) 
@@ -95,10 +123,13 @@ void playMode()
     score++;                // Increment score if signal received from arduino
     myPort.clear();         // Clear port buffer
   }*/
+=======
+>>>>>>> Stashed changes
 }
 
 void gameEnd()
 {
+  myPort.write(GAME_END);
   background(160,214,217);
   fill(255);
   if(score <= 2) {
@@ -112,17 +143,20 @@ void gameEnd()
   reStart();
 }
 
-void reStart() {
+void reStart() 
+{
   println(timeCountDown = timeCountDown - 1, "countdown is working");
   text("Going back to the main screen in " + timeCountDown/50, width/3, height/2+ 100);
   text("Click on screen to go back now", width/3, height/2 + 150);
-  if (timeCountDown <= 0) {
+  if (timeCountDown <= 0) 
+  {
     gameState = GAME_TITLE;    
     timeCountDown = 10 *60;
   } 
 }
 
-void displayStartScreen() {
+void displayStartScreen() 
+{
   ss.drawMe();
   spawnFish();
   textSize(100);
@@ -134,7 +168,8 @@ void displayStartScreen() {
   text("Click on screen to Start", width/3,height/2+300);
 }
 
-void displayHowToPlayScreen(){
+void displayHowToPlayScreen()
+{
   in.drawMe();
   textSize(40);
   text("This game is about ... ", width/8,height/2-80);
@@ -157,5 +192,70 @@ void spawnFish() {
   for (int i = 0; i < fish.size(); i++) {
     Fish fishes = fish.get(i);
     fishes.update();
+  }
+}
+
+// Check for signal from arduino to start game
+// Or check for information on caught fish
+void checkBuffer()
+{
+  myString = new String(inBuffer);
+
+  f = splitTokens(myString, "&");
+  c = splitTokens(myString, "C");
+  w = splitTokens(myString, "W");
+  
+  switch (gameState) 
+  {
+    case GAME_TITLE :
+      if (f[0] == "3") 
+      {
+        gameState = GAMEINSTRUCTION;
+      }
+      else
+      {
+        println("No change in game state: Title Screen");
+      }
+    break;
+        
+    case GAMEINSTRUCTION :
+      if (f[0] == "1") 
+      {
+        gameState = PLAYMODE;
+      }
+      else 
+      {
+        println("No change in game state: Game Instruction");
+      }
+    break;
+       
+    case PLAYMODE :
+    // Check info received about fish
+    switch (w[0]) // Check weight
+    {
+      case "S" :
+        score += 1;
+      break;
+        
+      case "M" :
+        score += 2;
+      break;
+      
+      case "L" :
+        score += 3;
+      break;  
+      
+      default :
+        println("No change to score from weight");
+      break;
+    }
+    break;
+    
+    case GAME_END :
+      if (f[0] == "0") 
+      {
+        gameState = GAME_TITLE;
+      }      
+    break; 
   }
 }
