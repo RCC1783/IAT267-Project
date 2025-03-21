@@ -10,8 +10,8 @@ class Fish {
     this.vel = vel;
     this.img = img;
     this.scale = scale;
-    xHeight = 150;
-    xWidth = 150;
+    xHeight = 50;
+    xWidth = 60;
   }
   
   void update() {

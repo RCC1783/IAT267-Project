@@ -17,7 +17,7 @@ AudioPlayer backSound, click;
 boolean spacePressed = false;
 ArrayList<Fish> fish = new ArrayList<Fish>();
 PImage fishImg;
-PImage reversedFishImg;
+PImage deadFishImg;
 
 int gameState = GAME_TITLE; // Begin gamestate at game title screen
 int gameTimeMax = 2000;    // Max play time in ms
@@ -99,9 +99,10 @@ void playMode()
 
 void gameEnd()
 {
-  background(160,214,217);
+  //background(160,214,217);
   fill(255);
   if(score <= 2) {
+    ifLose();
     text("Hm...", width/3, height/4);
     text("Your score is", width/3, height/4+50);
   } else if (score >= 3) {
@@ -144,7 +145,7 @@ void displayHowToPlayScreen(){
 
 void loadAssets() {
   fishImg = loadImage("fish.png");
-  reversedFishImg = loadImage("reversedFish.png");
+  deadFishImg = loadImage("dead.png");
   ss = new StartScreen(loadImage("start.png"));
   in = new Intro(loadImage("intro.png"));
   minim = new Minim(this);
@@ -158,4 +159,9 @@ void spawnFish() {
     Fish fishes = fish.get(i);
     fishes.update();
   }
+}
+
+void ifLose() {
+  background(233);
+  image(deadFishImg, width/2,height/2, 180,65);
 }
