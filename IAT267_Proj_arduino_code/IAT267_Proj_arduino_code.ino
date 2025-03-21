@@ -63,11 +63,6 @@ void loop() {
   switch (gameState){
     case GAME_TITLE:
       {
-//        byte keystroke;
-//        if(Serial.available() > 0){
-//          gameState = PLAYMODE;
-//          gameTime = millis();
-//        }
           if(digitalRead(REEL_BUTTON_PIN) == HIGH){
             Serial.println("3&");
             gameState = PLAYMODE;
