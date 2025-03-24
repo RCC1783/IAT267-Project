@@ -1,8 +1,9 @@
 import processing.serial.*;
 import ddf.minim.*;
-//Serial myPort; // serial port object
-//String[] portList = Serial.list();
-//final int PORT_NUM = 0;
+Serial myPort; // serial port object
+String[] portList = Serial.list();
+final int PORT_NUM = 0;
+PortHandler portHandler;
 
 final int GAME_TITLE = 0;
 final int PLAYMODE = 1;
@@ -20,13 +21,13 @@ PImage fishImg;
 PImage deadFishImg;
 PImage winFishImg;
 
-int gameState = GAME_TITLE; // Begin gamestate at game title screen
-int gameTimeMax = 60000;    // Max play time in ms
-int gameTimeStart = 0;      // Time of game start
-int time = 0;               // Time remaining
-int score = 0;              // Player score
-int timeCountDown = 10 * 60; // Start count down after the game ends and starts the game again
-int numberFish = 5; // Number of the fish
+int gameState = GAME_TITLE;   // Begin gamestate at game title screen
+int gameTimeMax = 60000;      // Max play time in ms
+int gameTimeStart = 0;        // Time of game start
+int time = 0;                 // Time remaining
+int score = 0;                // Player score
+int timeCountDown = 10 * 60;  // Start count down after the game ends and starts the game again
+int numberFish = 5;           // Number of the fish
 
 void setup() 
 {
@@ -36,8 +37,8 @@ for (int i = 0; i < numberFish; i ++) {
   fish.add(new Fish(new PVector(random(width),random(50, 650)), new PVector(random(-6,-1),0), fishImg, random(1,3)));  
 }
 
-//myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
-
+myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
+portHandler = new PortHandler(myPort);
 }
 
 void draw() 
@@ -69,13 +70,7 @@ void gameTitle()
   //background(0);
   displayStartScreen();
   score = 0;
-  
-  /* if (myPort.available() > 0) 
-  {
-    gameState = PLAYMODE;   // Start game if signal received from arduino
-    myPort.clear();         // Clear port buffer
-    gameTimeStart = millis();
-  } */
+  portHandler.checkBuffer();
 }
 
 void playMode() 
@@ -84,18 +79,13 @@ void playMode()
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
   text("" + score, width/2, height/2);                      // Show score in screen centre
   
+  portHandler.checkBuffer();
+  
   time = millis() - gameTimeStart;          // total time in play mode 
   if (time >= gameTimeMax) 
   {
     gameState = GAME_END;
   }
-  
-  
-  /*if (myPort.available() > 0) 
-  {
-    score++;                // Increment score if signal received from arduino
-    myPort.clear();         // Clear port buffer
-  }*/
 }
 
 void gameEnd()
@@ -113,6 +103,7 @@ void gameEnd()
   }
   //text(score, width/2, height/2);
   reStart();
+  portHandler.checkBuffer();
 }
 
 void reStart() {
