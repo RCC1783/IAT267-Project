@@ -13,8 +13,8 @@ class PortHandler
   byte[] inBuffer;       // buffer of fish
   String myString;       // buffer string
   String[] f;            // fish packet
-  int[] c;               // fish color
-  int[] w;               // fish weight
+  String[] c;               // fish color
+  String[] w;               // fish weight
 
   int weightL;           // Lower weight bound
   int weightM;           // middle weight bound
@@ -27,7 +27,7 @@ class PortHandler
   int yellow;
   int black;
   
-  void PortHandler(Serial p) 
+  PortHandler(Serial p) 
   {
     port = p;
     inBuffer = new byte[255];
@@ -42,22 +42,23 @@ class PortHandler
   // Or check for information on caught fish
   void checkBuffer()
   {
+    
     println("check buffer");
     myString = new String(inBuffer);
 
     f = splitTokens(myString, "&");
-    c = Integer.parseInt(splitTokens(myString, "C")); // Convert string value to integer
-    w = Integer.parseInt(splitTokens(myString, "W")); // Convert string value to integer
+    c = splitTokens(myString, "C"); // Convert string value to integer
+    w = splitTokens(myString, "W"); // Convert string value to integer
     
-    switch (fishquest.gameState) 
+    switch (gameState) 
     {
-      case fishquest.GAME_TITLE :
+      case GAME_TITLE :
       println("case: game title");
       println("received: "  + f[0]);
         if (f[0] == "3") 
         {
           println("change game state to game instruction");
-          fishquest.gameState = fishquest.GAMEINSTRUCTION;
+          gameState = GAMEINSTRUCTION;
         }
         else
         {
@@ -65,13 +66,13 @@ class PortHandler
         }
       break;
         
-      case fishquest.GAMEINSTRUCTION :
+      case GAMEINSTRUCTION :
       println("case: game instruction" + f[0]);
       println("received: "  + f[0]);
         if (f[0] == "1") 
         { 
           println("change game state to play mode");
-          fishquest.gameState = fishquest.PLAYMODE;
+          gameState = PLAYMODE;
         }
         else 
         {
@@ -79,21 +80,21 @@ class PortHandler
         }
       break;
        
-      case fishquest.PLAYMODE :
+      case PLAYMODE :
       println("case: playmode");
       println("weight: " + w[0]);
         // Check info received about fish
-        if (w[0] >= weightL && w[0] < weightM) 
+        if (Integer.parseInt(w[0]) >= weightL && Integer.parseInt(w[0]) < weightM) 
         {
-          fishquest.score += 1;
+          score += 1;
         }
-        else if (w[0] >= weightM && w[0] < weightL)
+        else if (Integer.parseInt(w[0]) >= weightM && Integer.parseInt(w[0]) < weightL)
         {
-          fishquest.score += 2;
+          score += 2;
         }
-        else if (w[0] >= weightL)
+        else if (Integer.parseInt(w[0]) >= weightL)
         {
-          fishquest.score += 3;
+          score += 3;
         }  
         else
         {
@@ -103,14 +104,19 @@ class PortHandler
         // TO DO : add score increase based on color
       break;
       
-      case fishquest.GAME_END :
+      case GAME_END :
       println("case: game instruction" + f[0]);
       println("received: "  + f[0]);      
         if (f[0] == "0") 
         {
           println("change game state to game title");
-          fishquest.gameState = fishquest.GAME_TITLE;
+          gameState = GAME_TITLE;
         }      
-      break; 
-    } 
+      break;
+      
+      default :
+      println("nothing happened");
+      break;
+    }
+  }
 }
