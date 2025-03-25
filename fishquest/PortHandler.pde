@@ -6,6 +6,7 @@
 *          But for now I just needed to have a class dealing with the communication
 *          stuff, and we can finetune it later - Jules
 */
+
 class PortHandler 
 {
   Serial port;
@@ -41,6 +42,7 @@ class PortHandler
   // Or check for information on caught fish
   void checkBuffer()
   {
+    println("check buffer");
     myString = new String(inBuffer);
 
     f = splitTokens(myString, "&");
@@ -50,8 +52,11 @@ class PortHandler
     switch (fishquest.gameState) 
     {
       case fishquest.GAME_TITLE :
+      println("case: game title");
+      println("received: "  + f[0]);
         if (f[0] == "3") 
         {
+          println("change game state to game instruction");
           fishquest.gameState = fishquest.GAMEINSTRUCTION;
         }
         else
@@ -61,8 +66,11 @@ class PortHandler
       break;
         
       case fishquest.GAMEINSTRUCTION :
+      println("case: game instruction" + f[0]);
+      println("received: "  + f[0]);
         if (f[0] == "1") 
-        {
+        { 
+          println("change game state to play mode");
           fishquest.gameState = fishquest.PLAYMODE;
         }
         else 
@@ -72,6 +80,8 @@ class PortHandler
       break;
        
       case fishquest.PLAYMODE :
+      println("case: playmode");
+      println("weight: " + w[0]);
         // Check info received about fish
         if (w[0] >= weightL && w[0] < weightM) 
         {
@@ -94,8 +104,11 @@ class PortHandler
       break;
       
       case fishquest.GAME_END :
+      println("case: game instruction" + f[0]);
+      println("received: "  + f[0]);      
         if (f[0] == "0") 
         {
+          println("change game state to game title");
           fishquest.gameState = fishquest.GAME_TITLE;
         }      
       break; 

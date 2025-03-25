@@ -68,6 +68,7 @@ void draw()
 void gameTitle() 
 {
   //background(0);
+  println("game title");
   displayStartScreen();
   score = 0;
   portHandler.checkBuffer();
@@ -75,6 +76,7 @@ void gameTitle()
 
 void playMode() 
 {
+  println("play mode");
   background(160,214,217);
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
   text("" + score, width/2, height/2);                      // Show score in screen centre
@@ -90,6 +92,7 @@ void playMode()
 
 void gameEnd()
 {
+  println("game end");
   //background(160,214,217);
   fill(255);
   if(score <= 2) {
