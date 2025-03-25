@@ -82,7 +82,7 @@ void loop() {
     case PLAYMODE:
       {
         int force = analogRead(WGHT_SENSOR_IN);
-//        Serial.println(force);
+        Serial.println(force);
         
 //        Serial.println(ROT_SENSOR_IN);
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));
