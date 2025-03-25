@@ -42,81 +42,83 @@ class PortHandler
   // Or check for information on caught fish
   void checkBuffer()
   {
-    
-    println("check buffer");
-    myString = new String(inBuffer);
-
-    f = splitTokens(myString, "&");
-    c = splitTokens(myString, "C"); // Convert string value to integer
-    w = splitTokens(myString, "W"); // Convert string value to integer
-    
-    switch (gameState) 
+    if (myPort.available() > 0) 
     {
-      case GAME_TITLE :
-      println("case: game title");
-      println("received: "  + f[0]);
-        if (f[0] == "3") 
-        {
-          println("change game state to game instruction");
-          gameState = GAMEINSTRUCTION;
-        }
-        else
-        {
-          println("No change in game state: Title Screen");
-        }
-      break;
-        
-      case GAMEINSTRUCTION :
-      println("case: game instruction" + f[0]);
-      println("received: "  + f[0]);
-        if (f[0] == "1") 
-        { 
-          println("change game state to play mode");
-          gameState = PLAYMODE;
-        }
-        else 
-        {
-          println("No change in game state: Game Instruction");
-        }
-      break;
-       
-      case PLAYMODE :
-      println("case: playmode");
-      println("weight: " + w[0]);
-        // Check info received about fish
-        if (Integer.parseInt(w[0]) >= weightL && Integer.parseInt(w[0]) < weightM) 
-        {
-          score += 1;
-        }
-        else if (Integer.parseInt(w[0]) >= weightM && Integer.parseInt(w[0]) < weightL)
-        {
-          score += 2;
-        }
-        else if (Integer.parseInt(w[0]) >= weightL)
-        {
-          score += 3;
-        }  
-        else
-        {
-          println("No change to score from weight");
-        }  
-        
-        // TO DO : add score increase based on color
-      break;
+      println("check buffer");
+      myString = new String(inBuffer);
+      println("buffer string" + myString);
+      f = splitTokens(myString, "&");
+      c = splitTokens(myString, "C"); // Convert string value to integer
+      w = splitTokens(myString, "W"); // Convert string value to integer
       
-      case GAME_END :
-      println("case: game instruction" + f[0]);
-      println("received: "  + f[0]);      
-        if (f[0] == "0") 
-        {
-          println("change game state to game title");
-          gameState = GAME_TITLE;
-        }      
-      break;
-      
-      default :
-      println("nothing happened");
-      break;
+      switch (gameState) 
+      {
+        case GAME_TITLE :
+        println("case: game title");
+        println("received: "  + f[0]);
+          if (f[0] == "3") 
+          {
+            println("change game state to game instruction");
+            gameState = GAMEINSTRUCTION;
+          }
+          else
+          {
+            println("No change in game state: Title Screen");
+          }
+        break;
+          
+        case GAMEINSTRUCTION :
+        println("case: game instruction" + f[0]);
+        println("received: "  + f[0]);
+          if (f[0] == "1") 
+          { 
+            println("change game state to play mode");
+            gameState = PLAYMODE;
+          }
+          else 
+          {
+            println("No change in game state: Game Instruction");
+          }
+        break;
+         
+        case PLAYMODE :
+        println("case: playmode");
+        println("weight: " + w[0]);
+          // Check info received about fish
+          if (Integer.parseInt(w[0]) >= weightL && Integer.parseInt(w[0]) < weightM) 
+          {
+            score += 1;
+          }
+          else if (Integer.parseInt(w[0]) >= weightM && Integer.parseInt(w[0]) < weightL)
+          {
+            score += 2;
+          }
+          else if (Integer.parseInt(w[0]) >= weightL)
+          {
+            score += 3;
+          }  
+          else
+          {
+            println("No change to score from weight");
+          }  
+          
+          // TO DO : add score increase based on color
+        break;
+        
+        case GAME_END :
+        println("case: game instruction" + f[0]);
+        println("received: "  + f[0]);      
+          if (f[0] == "0") 
+          {
+            println("change game state to game title");
+            gameState = GAME_TITLE;
+          }      
+        break;
+        
+        default :
+        println("nothing happened");
+        break;
+      }
     }
   }
 }
