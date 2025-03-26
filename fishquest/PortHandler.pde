@@ -42,6 +42,7 @@ class PortHandler
   // Or check for information on caught fish
   void checkBuffer()
   {
+    println(gameState);
     if (myPort.available() > 0) 
     {
       myPort.readBytesUntil('&', inBuffer);
@@ -72,8 +73,9 @@ class PortHandler
         break;
           
         case GAMEINSTRUCTION :
+        myPort.clear();
         println("case: game instruction" + f[0]);
-        println("received: "  + f[0]);
+        println("received: "  + f[1]);
           if (Integer.parseInt(f[0]) == 1) 
           { 
             println("change game state to play mode");

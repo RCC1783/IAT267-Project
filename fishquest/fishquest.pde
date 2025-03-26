@@ -139,6 +139,7 @@ void displayHowToPlayScreen() {
   text("This game is about ... ", width/8, height/2-80);
   text("Click on screen to start timer ", width/8, height/2);
   spawnFish();
+  portHandler.checkBuffer();
 }
 
 void loadAssets() {
