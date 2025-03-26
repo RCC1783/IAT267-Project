@@ -60,7 +60,9 @@ void setup() {
 
 void loop() {
   if(Serial.available() > 0){
-    gameState = Serial.read();
+    gameState = Serial.parseInt();
+//    Serial.print("FSLJDHFDSHF: ");
+//    Serial.println(gameState);
   }
   
   switch (gameState){
@@ -68,7 +70,7 @@ void loop() {
       {
           if(digitalRead(REEL_BUTTON_PIN) == HIGH){
             Serial.println("3&");
-            delay(20);
+//            delay(20);
 //            gameState = 3;
           }
       }
@@ -77,14 +79,14 @@ void loop() {
       {
         if(digitalRead(REEL_BUTTON_PIN) == HIGH){
             Serial.println("1&");
-            delay(20);
+//            delay(20);
 //            gameState = 1;
           }
       }
     case PLAYMODE:
       {
         int force = analogRead(WGHT_SENSOR_IN);
-        Serial.println(force);
+//        Serial.println(force);
         
 //        Serial.println(ROT_SENSOR_IN);
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));

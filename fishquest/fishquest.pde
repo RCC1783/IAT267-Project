@@ -29,43 +29,43 @@ int score = 0;                // Player score
 int timeCountDown = 10 * 60;  // Start count down after the game ends and starts the game again
 int numberFish = 5;           // Number of the fish
 
-void setup() 
+void setup()
 {
-size(1000, 716);  
-loadAssets();
-for (int i = 0; i < numberFish; i ++) {
-  fish.add(new Fish(new PVector(random(width),random(50, 650)), new PVector(random(-6,-1),0), fishImg, random(1,3)));  
+  size(1000, 716);
+  loadAssets();
+  for (int i = 0; i < numberFish; i ++) {
+    fish.add(new Fish(new PVector(random(width), random(50, 650)), new PVector(random(-6, -1), 0), fishImg, random(1, 3)));
+  }
+
+  myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
+  portHandler = new PortHandler(myPort);
 }
 
-myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
-portHandler = new PortHandler(myPort);
-}
-
-void draw() 
+void draw()
 {
-  
-  switch (gameState) 
-  {   
-    case GAME_TITLE :
-      gameTitle();
+
+  switch (gameState)
+  {
+  case GAME_TITLE :
+    gameTitle();
     break;
-    
-    case GAMEINSTRUCTION :
-      displayHowToPlayScreen();
-      gameTimeStart = millis();
+
+  case GAMEINSTRUCTION :
+    displayHowToPlayScreen();
+    gameTimeStart = millis();
     break;
-       
-    case PLAYMODE :
-      playMode();
+
+  case PLAYMODE :
+    playMode();
     break;
-    
-    case GAME_END :
-      gameEnd();
-    break;    
+
+  case GAME_END :
+    gameEnd();
+    break;
   }
 }
 
-void gameTitle() 
+void gameTitle()
 {
   myPort.write(gameState);
   //background(0);
@@ -75,18 +75,18 @@ void gameTitle()
   portHandler.checkBuffer();
 }
 
-void playMode() 
+void playMode()
 {
   myPort.write(gameState);
   println("play mode");
-  background(160,214,217);
+  background(160, 214, 217);
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
   text("" + score, width/2, height/2);                      // Show score in screen centre
-  
+
   portHandler.checkBuffer();
-  
-  time = millis() - gameTimeStart;          // total time in play mode 
-  if (time >= gameTimeMax) 
+
+  time = millis() - gameTimeStart;          // total time in play mode
+  if (time >= gameTimeMax)
   {
     gameState = GAME_END;
   }
@@ -94,11 +94,10 @@ void playMode()
 
 void gameEnd()
 {
-  myPort.write(gameState);
   println("game end");
   //background(160,214,217);
   fill(255);
-  if(score <= 2) {
+  if (score <= 2) {
     ifLose();
     text("Hm...", width/3, height/4);
     text("Your score is " + score, width/3, height/4+60);
@@ -117,9 +116,9 @@ void reStart() {
   text("Going back to the main screen in " + timeCountDown/50, width/3-80, height/2+ 100);
   text("Click on screen to go back now", width/3-50, height/2 + 150);
   if (timeCountDown <= 0) {
-    gameState = GAME_TITLE;    
+    gameState = GAME_TITLE;
     timeCountDown = 10 *60;
-  } 
+  }
 }
 
 void displayStartScreen() {
@@ -131,14 +130,14 @@ void displayStartScreen() {
   textSize(100);
   text("Welcome", width/2-150, height/2); // Display Title screen
   textSize(40);
-  text("Click on screen to Start", width/3,height/2+300);
+  text("Click on screen to Start", width/3, height/2+300);
 }
 
-void displayHowToPlayScreen(){
+void displayHowToPlayScreen() {
   in.drawMe();
   textSize(40);
-  text("This game is about ... ", width/8,height/2-80);
-  text("Click on screen to start timer ", width/8,height/2); 
+  text("This game is about ... ", width/8, height/2-80);
+  text("Click on screen to start timer ", width/8, height/2);
   spawnFish();
 }
 
@@ -163,10 +162,10 @@ void spawnFish() {
 
 void ifLose() {
   background(233);
-  image(deadFishImg, width/2 -40,height/2-20, 180,65);
+  image(deadFishImg, width/2 -40, height/2-20, 180, 65);
 }
 
 void ifWin() {
   background(147, 194, 245);
-  image(winFishImg, width/2 -40,height/2-60, 100,108);
+  image(winFishImg, width/2 -40, height/2-60, 100, 108);
 }
