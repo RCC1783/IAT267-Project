@@ -60,7 +60,7 @@ void setup() {
 
 void loop() {
   if(Serial.available() > 0){
-    gameState = Serial.parseInt();
+    gameState = Serial.read();
   }
   
   switch (gameState){
@@ -68,7 +68,8 @@ void loop() {
       {
           if(digitalRead(REEL_BUTTON_PIN) == HIGH){
             Serial.println("3&");
-            gameState = 3;
+            delay(20);
+//            gameState = 3;
           }
       }
       break;
@@ -76,7 +77,8 @@ void loop() {
       {
         if(digitalRead(REEL_BUTTON_PIN) == HIGH){
             Serial.println("1&");
-            gameState = 1;
+            delay(20);
+//            gameState = 1;
           }
       }
     case PLAYMODE:

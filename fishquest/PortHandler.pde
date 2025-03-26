@@ -44,19 +44,23 @@ class PortHandler
   {
     if (myPort.available() > 0) 
     {
-      println("check buffer");
-      myString = new String(inBuffer);
-      println("buffer string" + myString);
-      f = splitTokens(myString, "&");
-      c = splitTokens(myString, "C"); // Convert string value to integer
-      w = splitTokens(myString, "W"); // Convert string value to integer
-      
+      myPort.readBytesUntil('&', inBuffer);
+      if (inBuffer != null) {
+        println("in buffer " + inBuffer);
+        println("check buffer");
+        myString = new String(inBuffer);
+        //String[] useableString = splitTokens(myString, "&");
+        println("buffer string " + myString);
+        f = splitTokens(myString, "&");
+        c = splitTokens(f[0], "C"); // Convert string value to integer
+        w = splitTokens(f[0], "W"); // Convert string value to integer
+      }
       switch (gameState) 
       {
         case GAME_TITLE :
         println("case: game title");
         println("received: "  + f[0]);
-          if (f[0] == "3") 
+          if (Integer.parseInt(f[0]) == 3) 
           {
             println("change game state to game instruction");
             gameState = GAMEINSTRUCTION;
@@ -70,7 +74,7 @@ class PortHandler
         case GAMEINSTRUCTION :
         println("case: game instruction" + f[0]);
         println("received: "  + f[0]);
-          if (f[0] == "1") 
+          if (Integer.parseInt(f[0]) == 1) 
           { 
             println("change game state to play mode");
             gameState = PLAYMODE;
