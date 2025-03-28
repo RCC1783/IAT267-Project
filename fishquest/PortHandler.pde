@@ -88,26 +88,27 @@ class PortHandler
         break;
          
         case PLAYMODE :
+        int s = 0;
         println("case: playmode");
         println("weight: " + w[0]);
           // Check info received about fish
           if (Integer.parseInt(w[0]) >= weightL && Integer.parseInt(w[0]) < weightM) 
           {
-            score += 1;
+            s += 1;
           }
           else if (Integer.parseInt(w[0]) >= weightM && Integer.parseInt(w[0]) < weightL)
           {
-            score += 2;
+            s += 2;
           }
           else if (Integer.parseInt(w[0]) >= weightL)
           {
-            score += 3;
+            s += 3;
           }  
           else
           {
             println("No change to score from weight");
           }  
-          
+          score += s;
           // TO DO : add score increase based on color
         break;
         
