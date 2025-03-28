@@ -34,7 +34,6 @@ const int BUTTON_INPUT_TIMER_DELAY_MAX = 100;
 const int GAME_TITLE = 0;
 const int PLAYMODE = 1;
 const int GAME_END = 2;
-const int INSTRUCTION = 3;
 
 unsigned int gameState = 0;
 
@@ -48,7 +47,7 @@ void setup() {
   rodRotator.attach(ROD_ROTATOR_OUT);
   rodFwdBk.attach(ROD_MOVER_OUT);
 
-//  clrSensor.attachPAL(CLR_SENSOR_IN);
+  clrSensor.attachPAL(CLR_SENSOR_IN);
 
   pinMode(REEL_BUTTON_PIN, INPUT);
   pinMode(REEL_MOTOR_AI1, OUTPUT);
@@ -60,6 +59,7 @@ void setup() {
 }
 
 void loop() {
+<<<<<<< HEAD
   if(buttonInputTimer > 0){buttonInputTimer -= 1;}
   if(Serial.available() > 0){
     gameState = Serial.parseInt();
@@ -77,9 +77,27 @@ void loop() {
 //          delay(20);
         }
       
-      break;
-    case INSTRUCTION: //Instruction
+=======
+  if(Serial.available() > 0){
+    gameState = Serial.read();
+//    Serial.print("FSLJDHFDSHF: ");
+//    Serial.println(gameState);
+  }
+  
+  switch (gameState){
+    case GAME_TITLE:
       {
+          if(digitalRead(REEL_BUTTON_PIN) == HIGH){
+            Serial.println("3&");
+            delay(20);
+//            gameState = 3;
+          }
+      }
+>>>>>>> parent of 1551204 (Merge branch 'main' of https://github.com/RCC1783/IAT267-Project)
+      break;
+    case 3: //Instruction
+      {
+<<<<<<< HEAD
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
           Serial.print(PLAYMODE);
           Serial.println("&");
@@ -87,6 +105,13 @@ void loop() {
 //          delay(20);
           return;
         }
+=======
+        if(digitalRead(REEL_BUTTON_PIN) == HIGH){
+            Serial.println("1&");
+            delay(20);
+//            gameState = 1;
+          }
+>>>>>>> parent of 1551204 (Merge branch 'main' of https://github.com/RCC1783/IAT267-Project)
       }
     case PLAYMODE:
       {
@@ -190,6 +215,8 @@ void ReelController(){
     buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
     reelTime = 0;
   }
+
+  if(buttonInputTimer > 0){buttonInputTimer -= 1;}
 
   if(lineReelDown == true && reelTime < REEL_TIME_MAX){
 //    Serial.println("reelingDown");
