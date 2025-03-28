@@ -43,7 +43,12 @@ void setup()
 
 void draw()
 {
+<<<<<<< HEAD
 
+=======
+  myPort.write(gameState);
+  println(gameState);
+>>>>>>> parent of 5ea3a57 (AAAAAAA)
   switch (gameState)
   {
   case GAME_TITLE :
@@ -67,17 +72,17 @@ void draw()
 
 void gameTitle()
 {
-  myPort.write(gameState);
   //background(0);
   println("game title");
   displayStartScreen();
   score = 0;
   portHandler.checkBuffer();
+  myPort.write(gameState);
 }
 
 void playMode()
 {
-  myPort.write(gameState);
+  //myPort.write(gameState);
   println("play mode");
   background(160, 214, 217);
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds

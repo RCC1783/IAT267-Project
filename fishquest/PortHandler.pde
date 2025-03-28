@@ -69,6 +69,12 @@ class PortHandler
           {
             println("No change in game state: Title Screen");
           }
+<<<<<<< HEAD
+=======
+          //port.clear();
+          //inBuffer = new byte[255];
+          //myString =  "";
+>>>>>>> parent of 5ea3a57 (AAAAAAA)
         break;
           
         case GAMEINSTRUCTION :
@@ -84,6 +90,13 @@ class PortHandler
           {
             println("No change in game state: Game Instruction");
           }
+<<<<<<< HEAD
+=======
+          //port.clear();
+          //inBuffer = new byte[255];
+          //myString =  "";
+          
+>>>>>>> parent of 5ea3a57 (AAAAAAA)
         break;
          
         case PLAYMODE :

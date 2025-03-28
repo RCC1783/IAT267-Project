@@ -61,8 +61,10 @@ void setup() {
 void loop() {
 <<<<<<< HEAD
   if(buttonInputTimer > 0){buttonInputTimer -= 1;}
-  if(Serial.available() > 0){
+  Serial.println("Title");
+  if(Serial.available() > 0 && Serial.parseInt() != gameState){
     gameState = Serial.parseInt();
+<<<<<<< HEAD
     while(Serial.available() > 0){
       Serial.read();
     }
@@ -70,12 +72,20 @@ void loop() {
   switch (gameState){
     case GAME_TITLE:
       
+=======
+  }
+  switch (gameState){
+    case GAME_TITLE:
+      {
+        Serial.flush();
+>>>>>>> parent of 5ea3a57 (AAAAAAA)
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
           Serial.print(INSTRUCTION);
           Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
 //          delay(20);
         }
+<<<<<<< HEAD
       
 =======
   if(Serial.available() > 0){
@@ -98,6 +108,14 @@ void loop() {
     case 3: //Instruction
       {
 <<<<<<< HEAD
+=======
+      }
+      break;
+    case INSTRUCTION: //Instruction
+      {
+        Serial.flush();
+        Serial.println("Instruction");
+>>>>>>> parent of 5ea3a57 (AAAAAAA)
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
           Serial.print(PLAYMODE);
           Serial.println("&");
@@ -105,6 +123,7 @@ void loop() {
 //          delay(20);
           return;
         }
+<<<<<<< HEAD
 =======
         if(digitalRead(REEL_BUTTON_PIN) == HIGH){
             Serial.println("1&");
@@ -115,6 +134,12 @@ void loop() {
       }
     case PLAYMODE:
       {
+=======
+      }
+    case PLAYMODE:
+      {
+        Serial.println("Playmode");
+>>>>>>> parent of 5ea3a57 (AAAAAAA)
         int force = analogRead(WGHT_SENSOR_IN);
 //        Serial.println(force);
         
