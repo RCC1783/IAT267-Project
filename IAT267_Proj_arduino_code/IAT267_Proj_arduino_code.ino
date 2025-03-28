@@ -61,14 +61,14 @@ void setup() {
 
 void loop() {
   if(buttonInputTimer > 0){buttonInputTimer -= 1;}
+  Serial.println("Title");
+  if(Serial.available() > 0 && Serial.parseInt() != gameState){
+    gameState = Serial.parseInt();
+  }
   switch (gameState){
     case GAME_TITLE:
       {
-        Serial.flush()
-        Serial.println("Title");
-        if(Serial.available() > 0){
-          gameState = Serial.parseInt();
-        }
+        Serial.flush();
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
           Serial.print(INSTRUCTION);
           Serial.println("&");
@@ -81,9 +81,6 @@ void loop() {
       {
         Serial.flush();
         Serial.println("Instruction");
-        if(Serial.available() > 0){
-          gameState = Serial.parseInt();
-        }
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
           Serial.print(PLAYMODE);
           Serial.println("&");

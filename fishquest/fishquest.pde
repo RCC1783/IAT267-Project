@@ -2,7 +2,7 @@ import processing.serial.*;
 import ddf.minim.*;
 Serial myPort; // serial port object
 String[] portList = Serial.list();
-final int PORT_NUM = 4;
+final int PORT_NUM = 2;
 PortHandler portHandler;
 
 final int GAME_TITLE = 0;
@@ -38,14 +38,16 @@ void setup()
   for (int i = 0; i < numberFish; i ++) {
     fish.add(new Fish(new PVector(random(width), random(50, 650)), new PVector(random(-6, -1), 0), fishImg, random(1, 3)));
   }
-
+  
+  println(Serial.list());
   myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
   portHandler = new PortHandler(myPort);
 }
 
 void draw()
 {
-
+  myPort.write(gameState);
+  println(gameState);
   switch (gameState)
   {
   case GAME_TITLE :
@@ -69,17 +71,17 @@ void draw()
 
 void gameTitle()
 {
-  myPort.write(gameState);
   //background(0);
   println("game title");
   displayStartScreen();
   score = 0;
   portHandler.checkBuffer();
+  myPort.write(gameState);
 }
 
 void playMode()
 {
-  myPort.write(gameState);
+  //myPort.write(gameState);
   println("play mode");
   background(160, 214, 217);
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
