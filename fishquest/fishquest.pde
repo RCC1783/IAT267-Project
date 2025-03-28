@@ -47,7 +47,7 @@ void setup()
 void draw()
 {
   myPort.write(gameState);
-  println(gameState);
+  //println(gameState);
   switch (gameState)
   {
   case GAME_TITLE :
@@ -71,17 +71,17 @@ void draw()
 
 void gameTitle()
 {
+  myPort.write(gameState);
   //background(0);
   println("game title");
   displayStartScreen();
   score = 0;
   portHandler.checkBuffer();
-  myPort.write(gameState);
 }
 
 void playMode()
 {
-  //myPort.write(gameState);
+  myPort.write(gameState);
   println("play mode");
   background(160, 214, 217);
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
@@ -98,6 +98,7 @@ void playMode()
 
 void gameEnd()
 {
+  myPort.write(gameState);
   println("game end");
   //background(160,214,217);
   fill(255);
@@ -138,6 +139,7 @@ void displayStartScreen() {
 }
 
 void displayHowToPlayScreen() {
+  myPort.write(gameState);
   in.drawMe();
   textSize(40);
   text("This game is about ... ", width/8, height/2-80);

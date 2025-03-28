@@ -70,7 +70,7 @@ class PortHandler
           {
             println("No change in game state: Title Screen");
           }
-          //port.clear();
+          port.clear();
           //inBuffer = new byte[255];
           //myString =  "";
         break;
@@ -87,7 +87,7 @@ class PortHandler
           {
             println("No change in game state: Game Instruction");
           }
-          //port.clear();
+          port.clear();
           //inBuffer = new byte[255];
           //myString =  "";
           
