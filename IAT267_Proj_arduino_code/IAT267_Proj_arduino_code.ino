@@ -60,11 +60,9 @@ void setup() {
 }
 
 void loop() {
-  if(buttonInputTimer > 0){buttonInputTimer -= 1;}
+  if(buttonInputTimer > 0){buttonInputTimer --;}
   if(Serial.available() > 0){
     gameState = Serial.parseInt();
-//    Serial.print("State read: ");
-//    Serial.println(gameState);
     while(Serial.available()  > 0){
       Serial.read();
     }
@@ -77,7 +75,7 @@ void loop() {
           Serial.print(INSTRUCTION);
           Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
-          delay(20);
+//          delay(20);
         }
       
       break;
@@ -89,7 +87,7 @@ void loop() {
           Serial.print(PLAYMODE);
           Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
-          delay(20);
+//          delay(20);
         }
       
       break;

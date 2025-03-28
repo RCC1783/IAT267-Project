@@ -71,7 +71,7 @@ void draw()
 
 void gameTitle()
 {
-  myPort.write(gameState);
+  //myPort.write(gameState);
   //background(0);
   println("game title");
   displayStartScreen();
@@ -81,7 +81,7 @@ void gameTitle()
 
 void playMode()
 {
-  myPort.write(gameState);
+  //myPort.write(gameState);
   println("play mode");
   background(160, 214, 217);
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
@@ -98,7 +98,7 @@ void playMode()
 
 void gameEnd()
 {
-  myPort.write(gameState);
+  //myPort.write(gameState);
   println("game end");
   //background(160,214,217);
   fill(255);

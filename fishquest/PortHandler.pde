@@ -42,10 +42,10 @@ class PortHandler
   // Or check for information on caught fish
   void checkBuffer()
   {
-    //println(gameState);
-    if (myPort.available() > 0) 
+    println("checking buffer");
+    if (port.available() > 0) 
     {
-      myPort.readBytesUntil('&', inBuffer);
+      port.readBytesUntil('&', inBuffer);
       if (inBuffer != null) {
         println("in buffer " + inBuffer);
         println("check buffer");
