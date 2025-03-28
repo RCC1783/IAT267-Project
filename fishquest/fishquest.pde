@@ -10,8 +10,6 @@ final int PLAYMODE = 1;
 final int GAME_END = 2;
 final int GAMEINSTRUCTION = 3;
 
-
-
 StartScreen ss;
 Intro in;
 Minim minim;
