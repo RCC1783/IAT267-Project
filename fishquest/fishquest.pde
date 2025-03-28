@@ -2,7 +2,7 @@ import processing.serial.*;
 import ddf.minim.*;
 Serial myPort; // serial port object
 String[] portList = Serial.list();
-final int PORT_NUM = 4;
+final int PORT_NUM = 2;
 PortHandler portHandler;
 
 final int GAME_TITLE = 0;

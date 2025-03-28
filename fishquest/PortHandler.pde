@@ -43,8 +43,7 @@ class PortHandler
   void checkBuffer()
   {
     println(gameState);
-    if (myPort.available() > 0) 
-    {
+    //if (myPort.available() > 0) {
       myPort.readBytesUntil('&', inBuffer);
       if (inBuffer != null) {
         println("in buffer " + inBuffer);
@@ -55,7 +54,7 @@ class PortHandler
         f = splitTokens(myString, "&");
         c = splitTokens(f[0], "C"); // Convert string value to integer
         w = splitTokens(f[0], "W"); // Convert string value to integer
-      }
+      //}
       switch (gameState) 
       {
         case GAME_TITLE :
