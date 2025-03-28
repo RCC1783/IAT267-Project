@@ -60,41 +60,40 @@ void setup() {
 }
 
 void loop() {
-  if(buttonInputTimer > 0){buttonInputTimer -= 1;}
+  if(buttonInputTimer > 0){buttonInputTimer --;}
+  if(Serial.available() > 0){
+    gameState = Serial.parseInt();
+    while(Serial.available()  > 0){
+      Serial.read();
+    }
+  }
   switch (gameState){
     case GAME_TITLE:
-      {
-        Serial.flush()
-        Serial.println("Title");
-        if(Serial.available() > 0){
-          gameState = Serial.parseInt();
-        }
+      
+//        Serial.flush();
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
           Serial.print(INSTRUCTION);
           Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
 //          delay(20);
         }
-      }
+      
       break;
     case INSTRUCTION: //Instruction
-      {
-        Serial.flush();
-        Serial.println("Instruction");
-        if(Serial.available() > 0){
-          gameState = Serial.parseInt();
-        }
+      
+//        Serial.flush();
+//        Serial.println("Instruction");
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
           Serial.print(PLAYMODE);
           Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
 //          delay(20);
-          return;
         }
-      }
+      
+      break;
     case PLAYMODE:
       {
-        Serial.println("Playmode");
+//        Serial.println("Playmode");
         int force = analogRead(WGHT_SENSOR_IN);
 //        Serial.println(force);
         
