@@ -42,10 +42,10 @@ class PortHandler
   // Or check for information on caught fish
   void checkBuffer()
   {
-    println("checking buffer");
-    if (port.available() > 0) 
+    println(gameState);
+    if (myPort.available() > 0) 
     {
-      port.readBytesUntil('&', inBuffer);
+      myPort.readBytesUntil('&', inBuffer);
       if (inBuffer != null) {
         println("in buffer " + inBuffer);
         println("check buffer");
@@ -70,14 +70,12 @@ class PortHandler
           {
             println("No change in game state: Title Screen");
           }
-          port.clear();
-          //inBuffer = new byte[255];
-          //myString =  "";
         break;
           
         case GAMEINSTRUCTION :
-        println("case: game instruction " + f[0]);
-        println("received: "  + f[0]);
+        myPort.clear();
+        println("case: game instruction" + f[0]);
+        println("received: "  + f[1]);
           if (Integer.parseInt(f[0]) == 1) 
           { 
             println("change game state to play mode");
@@ -87,10 +85,6 @@ class PortHandler
           {
             println("No change in game state: Game Instruction");
           }
-          port.clear();
-          //inBuffer = new byte[255];
-          //myString =  "";
-          
         break;
          
         case PLAYMODE :
