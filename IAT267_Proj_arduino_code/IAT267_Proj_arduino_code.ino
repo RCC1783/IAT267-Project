@@ -34,6 +34,7 @@ const int BUTTON_INPUT_TIMER_DELAY_MAX = 100;
 const int GAME_TITLE = 0;
 const int PLAYMODE = 1;
 const int GAME_END = 2;
+const int INSTRUCTION = 3;
 
 unsigned int gameState = 0;
 
@@ -47,7 +48,7 @@ void setup() {
   rodRotator.attach(ROD_ROTATOR_OUT);
   rodFwdBk.attach(ROD_MOVER_OUT);
 
-  clrSensor.attachPAL(CLR_SENSOR_IN);
+//  clrSensor.attachPAL(CLR_SENSOR_IN);
 
   pinMode(REEL_BUTTON_PIN, INPUT);
   pinMode(REEL_MOTOR_AI1, OUTPUT);
@@ -59,63 +60,24 @@ void setup() {
 }
 
 void loop() {
-<<<<<<< HEAD
   if(buttonInputTimer > 0){buttonInputTimer -= 1;}
-  Serial.println("Title");
-  if(Serial.available() > 0 && Serial.parseInt() != gameState){
+  if(Serial.available() > 0){
     gameState = Serial.parseInt();
-<<<<<<< HEAD
     while(Serial.available() > 0){
       Serial.read();
     }
   }
   switch (gameState){
     case GAME_TITLE:
-      
-=======
-  }
-  switch (gameState){
-    case GAME_TITLE:
-      {
-        Serial.flush();
->>>>>>> parent of 5ea3a57 (AAAAAAA)
-        if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
-          Serial.print(INSTRUCTION);
-          Serial.println("&");
-          buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
-//          delay(20);
-        }
-<<<<<<< HEAD
-      
-=======
-  if(Serial.available() > 0){
-    gameState = Serial.read();
-//    Serial.print("FSLJDHFDSHF: ");
-//    Serial.println(gameState);
-  }
-  
-  switch (gameState){
-    case GAME_TITLE:
-      {
-          if(digitalRead(REEL_BUTTON_PIN) == HIGH){
+          if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
             Serial.println("3&");
             delay(20);
+            buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
 //            gameState = 3;
           }
-      }
->>>>>>> parent of 1551204 (Merge branch 'main' of https://github.com/RCC1783/IAT267-Project)
-      break;
-    case 3: //Instruction
-      {
-<<<<<<< HEAD
-=======
-      }
       break;
     case INSTRUCTION: //Instruction
-      {
         Serial.flush();
-        Serial.println("Instruction");
->>>>>>> parent of 5ea3a57 (AAAAAAA)
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
           Serial.print(PLAYMODE);
           Serial.println("&");
@@ -123,27 +85,11 @@ void loop() {
 //          delay(20);
           return;
         }
-<<<<<<< HEAD
-=======
-        if(digitalRead(REEL_BUTTON_PIN) == HIGH){
-            Serial.println("1&");
-            delay(20);
-//            gameState = 1;
-          }
->>>>>>> parent of 1551204 (Merge branch 'main' of https://github.com/RCC1783/IAT267-Project)
-      }
+      break;
     case PLAYMODE:
       {
-=======
-      }
-    case PLAYMODE:
-      {
-        Serial.println("Playmode");
->>>>>>> parent of 5ea3a57 (AAAAAAA)
         int force = analogRead(WGHT_SENSOR_IN);
-//        Serial.println(force);
         
-//        Serial.println(ROT_SENSOR_IN);
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));
         rodFwdBk.write(AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
   
@@ -160,8 +106,6 @@ void loop() {
       break;
     case GAME_END:
       {
-//        Serial.println("end");
-        // raise the line back up
         if(lineReelDown == false && reelTime < REEL_TIME_MAX){
 //          Serial.println("reelingUp");
           reelTime++;
