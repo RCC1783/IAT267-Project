@@ -71,6 +71,7 @@ void loop() {
     case GAME_TITLE:
       
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
+          Serial.println("&");
           Serial.print(INSTRUCTION);
           Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
@@ -81,6 +82,7 @@ void loop() {
     case INSTRUCTION: //Instruction
       {
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
+          Serial.println("&");
           Serial.print(PLAYMODE);
           Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
