@@ -13,8 +13,8 @@ class PortHandler
   byte[] inBuffer;       // buffer of fish
   String myString;       // buffer string
   String[] f;            // fish packet
-  String[] c;               // fish color
-  String[] w;               // fish weight
+  String[] c;            // fish color
+  String[] w;            // fish weight
 
   int weightL;           // Lower weight bound
   int weightM;           // middle weight bound
@@ -42,9 +42,11 @@ class PortHandler
   // Or check for information on caught fish
   void checkBuffer()
   {
-    println(gameState);
-    //if (myPort.available() > 0) {
-      myPort.readBytesUntil('&', inBuffer);
+    println("checking buffer");
+    if (port.available() > 0) 
+    {
+      //println("port available");
+      port.readBytesUntil('&', inBuffer);
       if (inBuffer != null) {
         println("in buffer " + inBuffer);
         println("check buffer");
@@ -54,7 +56,7 @@ class PortHandler
         f = splitTokens(myString, "&");
         c = splitTokens(f[0], "C"); // Convert string value to integer
         w = splitTokens(f[0], "W"); // Convert string value to integer
-      //}
+      }
       switch (gameState) 
       {
         case GAME_TITLE :
@@ -69,18 +71,14 @@ class PortHandler
           {
             println("No change in game state: Title Screen");
           }
-<<<<<<< HEAD
-=======
-          //port.clear();
+          port.clear();
           //inBuffer = new byte[255];
           //myString =  "";
->>>>>>> parent of 5ea3a57 (AAAAAAA)
         break;
           
         case GAMEINSTRUCTION :
-        myPort.clear();
-        println("case: game instruction" + f[0]);
-        println("received: "  + f[1]);
+        println("case: game instruction " + f[0]);
+        println("received: "  + f[0]);
           if (Integer.parseInt(f[0]) == 1) 
           { 
             println("change game state to play mode");
@@ -90,13 +88,10 @@ class PortHandler
           {
             println("No change in game state: Game Instruction");
           }
-<<<<<<< HEAD
-=======
-          //port.clear();
+          port.clear();
           //inBuffer = new byte[255];
           //myString =  "";
           
->>>>>>> parent of 5ea3a57 (AAAAAAA)
         break;
          
         case PLAYMODE :

@@ -2,13 +2,22 @@ import processing.serial.*;
 import ddf.minim.*;
 Serial myPort; // serial port object
 String[] portList = Serial.list();
-final int PORT_NUM = 2;
-PortHandler portHandler;
+final int PORT_NUM = 4;
+//PortHandler portHandler;
 
 final int GAME_TITLE = 0;
 final int PLAYMODE = 1;
 final int GAME_END = 2;
 final int GAMEINSTRUCTION = 3;
+
+  byte[] inBuffer;       // buffer of fish
+  String myString;       // buffer string
+  String[] f;            // fish packet
+  String[] c;               // fish color
+  String[] w;               // fish weight
+  int weightL;           // Lower weight bound
+  int weightM;           // middle weight bound
+  int tweightU;          // Upper weight bound
 
 StartScreen ss;
 Intro in;
@@ -36,19 +45,21 @@ void setup()
   for (int i = 0; i < numberFish; i ++) {
     fish.add(new Fish(new PVector(random(width), random(50, 650)), new PVector(random(-6, -1), 0), fishImg, random(1, 3)));
   }
-
+  
+  println(Serial.list());
   myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
-  portHandler = new PortHandler(myPort);
+  //portHandler = new PortHandler(myPort);
+      inBuffer = new byte[255];
+    
+    // TO DO : Change to values reflecting actual weight
+    weightL = 10; 
+    weightM = 20; 
+    tweightU = 30; 
 }
 
 void draw()
 {
-<<<<<<< HEAD
-
-=======
-  myPort.write(gameState);
   println(gameState);
->>>>>>> parent of 5ea3a57 (AAAAAAA)
   switch (gameState)
   {
   case GAME_TITLE :
@@ -76,19 +87,18 @@ void gameTitle()
   println("game title");
   displayStartScreen();
   score = 0;
-  portHandler.checkBuffer();
-  myPort.write(gameState);
+  checkBuffer();
 }
 
+//hello world
 void playMode()
 {
-  //myPort.write(gameState);
   println("play mode");
   background(160, 214, 217);
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
   text("" + score, width/2, height/2);                      // Show score in screen centre
 
-  portHandler.checkBuffer();
+  checkBuffer();
 
   time = millis() - gameTimeStart;          // total time in play mode
   if (time >= gameTimeMax)
@@ -113,7 +123,7 @@ void gameEnd()
   }
   //text(score, width/2, height/2);
   reStart();
-  portHandler.checkBuffer();
+  checkBuffer();
 }
 
 void reStart() {
@@ -144,7 +154,7 @@ void displayHowToPlayScreen() {
   text("This game is about ... ", width/8, height/2-80);
   text("Click on screen to start timer ", width/8, height/2);
   spawnFish();
-  portHandler.checkBuffer();
+  checkBuffer();
 }
 
 void loadAssets() {
@@ -175,3 +185,102 @@ void ifWin() {
   background(147, 194, 245);
   image(winFishImg, width/2 -40, height/2-60, 100, 108);
 }
+
+  void checkBuffer()
+  {
+    println("checking buffer");
+    println(myPort.read());
+    if (myPort.available() > 0) 
+    {
+      myPort.readBytesUntil('&', inBuffer);
+      if (inBuffer != null) {
+        println("in buffer " + inBuffer);
+        println("check buffer");
+        myString = new String(inBuffer);
+        //String[] useableString = splitTokens(myString, "&");
+        println("buffer string " + myString);
+        f = splitTokens(myString, "&");
+        c = splitTokens(f[0], "C"); // Convert string value to integer
+        w = splitTokens(f[0], "W"); // Convert string value to integer
+      }
+      switch (gameState) 
+      {
+        case GAME_TITLE :
+        println("case: game title");
+        println("received: "  + f[0]);
+          if (f[0] == "3") 
+          {
+            println("change game state to game instruction");
+            gameState = GAMEINSTRUCTION;
+            myPort.write(gameState);
+          }
+          else
+          {
+            println("No change in game state: Title Screen");
+          }
+          myPort.clear();
+          //inBuffer = new byte[255];
+          //myString =  "";
+        break;
+          
+        case GAMEINSTRUCTION :
+        println("case: game instruction " + f[0]);
+        println("received: "  + f[0]);
+          if (Integer.parseInt(f[0]) == 1) 
+          { 
+            println("change game state to play mode");
+            gameState = PLAYMODE;
+            myPort.write(gameState);
+          }
+          else 
+          {
+            println("No change in game state: Game Instruction");
+          }
+          myPort.clear();
+          //inBuffer = new byte[255];
+          //myString =  "";
+          
+        break;
+         
+        case PLAYMODE :
+        int s = 0;
+        println("case: playmode");
+        println("weight: " + w[0]);
+          // Check info received about fish
+          if (Integer.parseInt(w[0]) >= weightL && Integer.parseInt(w[0]) < weightM) 
+          {
+            s += 1;
+          }
+          else if (Integer.parseInt(w[0]) >= weightM && Integer.parseInt(w[0]) < weightL)
+          {
+            s += 2;
+          }
+          else if (Integer.parseInt(w[0]) >= weightL)
+          {
+            s += 3;
+          }  
+          else
+          {
+            println("No change to score from weight");
+          }  
+          score += s;
+          // TO DO : add score increase based on color
+        break;
+        
+        case GAME_END :
+        println("case: game instruction" + f[0]);
+        println("received: "  + f[0]);      
+          if (f[0] == "0") 
+          {
+            println("change game state to game title");
+            gameState = GAME_TITLE;
+            myPort.write(gameState);
+          }      
+        break;
+        
+        default :
+        println("nothing happened");
+        break;
+      }
+    }
+  }
