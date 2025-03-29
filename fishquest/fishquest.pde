@@ -2,7 +2,7 @@ import processing.serial.*;
 import ddf.minim.*;
 Serial myPort; // serial port object
 String[] portList = Serial.list();
-final int PORT_NUM = 4;
+final int PORT_NUM = 2;
 //PortHandler portHandler;
 
 final int GAME_TITLE = 0;
@@ -59,7 +59,7 @@ void setup()
 
 void draw()
 {
-  println(gameState);
+  //println(gameState);
   switch (gameState)
   {
   case GAME_TITLE :
@@ -84,7 +84,7 @@ void draw()
 void gameTitle()
 {
   //background(0);
-  println("game title");
+  //println("game title");
   displayStartScreen();
   score = 0;
   checkBuffer();
@@ -93,7 +93,7 @@ void gameTitle()
 //hello world
 void playMode()
 {
-  println("play mode");
+  //println("play mode");
   background(160, 214, 217);
   text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
   text("" + score, width/2, height/2);                      // Show score in screen centre
@@ -188,8 +188,8 @@ void ifWin() {
 
   void checkBuffer()
   {
-    println("checking buffer");
-    println(myPort.read());
+    //println("enter buffer");
+    //println(myPort.available());
     if (myPort.available() > 0) 
     {
       myPort.readBytesUntil('&', inBuffer);
@@ -208,17 +208,18 @@ void ifWin() {
         case GAME_TITLE :
         println("case: game title");
         println("received: "  + f[0]);
-          if (f[0] == "3") 
+          if (Integer.parseInt(f[0]) == 3) 
           {
             println("change game state to game instruction");
             gameState = GAMEINSTRUCTION;
+            println("Writing: " + gameState);
             myPort.write(gameState);
           }
           else
           {
             println("No change in game state: Title Screen");
           }
-          myPort.clear();
+          //myPort.clear();
           //inBuffer = new byte[255];
           //myString =  "";
         break;
@@ -226,17 +227,21 @@ void ifWin() {
         case GAMEINSTRUCTION :
         println("case: game instruction " + f[0]);
         println("received: "  + f[0]);
-          if (Integer.parseInt(f[0]) == 1) 
+          if (Integer.parseInt(f[0]) == 3) 
           { 
             println("change game state to play mode");
             gameState = PLAYMODE;
+            println("Writing: " + gameState);
             myPort.write(gameState);
           }
           else 
           {
             println("No change in game state: Game Instruction");
+            for(int i = 0; i < f.length; i++){
+              println(i + " " + f[i]);
+            }
           }
-          myPort.clear();
+          //myPort.clear();
           //inBuffer = new byte[255];
           //myString =  "";
           
