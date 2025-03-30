@@ -39,7 +39,7 @@ const int INSTRUCTION = 3;
 unsigned int gameState = 0;
 
 unsigned long gameTimeMax = 60000; //1 minute
-unsigned long gameTime = 0;
+unsigned long gameStartTime = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -61,41 +61,43 @@ void setup() {
 
 void loop() {
   if(buttonInputTimer > 0){buttonInputTimer -= 1;}
-  if(Serial.available() > 0){
-    gameState = Serial.parseInt();
-    while(Serial.available() > 0){
-      Serial.read();
-    }
-  }
+//  if(Serial.available() > 0){
+//    gameState = Serial.parseInt();
+//    while(Serial.available() > 0){
+//      Serial.read();
+//    }
+//  }
   switch (gameState){
     case GAME_TITLE:
-      
-        if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
-          Serial.println("&");
-          Serial.print(INSTRUCTION);
-          Serial.println("&");
+        Serial.println("TITLE");
+        if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer <= 0){
+//          Serial.println("&");
+//          Serial.print(INSTRUCTION);
+//          Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
-//          delay(20);
+          gameState = INSTRUCTION;
+          delay(20);
         }
-      
       break;
     case INSTRUCTION: //Instruction
-      {
-        if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer == 0){
-          Serial.println("&");
-          Serial.print(PLAYMODE);
-          Serial.println("&");
+        Serial.println("INSTRUCTION");
+        if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer <= 0){
+//          Serial.println("&");
+//          Serial.print(PLAYMODE);
+//          Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
-//          delay(20);
-          return;
+          gameState = PLAYMODE;
+          gameStartTime = millis();
+          delay(20);
         }
-      }
+        break;
     case PLAYMODE:
       {
+        if(millis() >= gameStartTime + gameTimeMax){
+          gameState = GAME_END; 
+        }
         int force = analogRead(WGHT_SENSOR_IN);
-//        Serial.println(force);
         
-//        Serial.println(ROT_SENSOR_IN);
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));
         rodFwdBk.write(AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
   
@@ -106,16 +108,13 @@ void loop() {
         int b = clrSensor.bluePAL();
 
         printToSerial(r, g, b, force);
-  
-//        delay(15);
       }
       break;
     case GAME_END:
       {
-//        Serial.println("end");
+        Serial.println("end");
         // raise the line back up
         if(lineReelDown == false && reelTime < REEL_TIME_MAX){
-//          Serial.println("reelingUp");
           reelTime++;
           
           //Spin Counter-Clockwise at speed 150
@@ -124,7 +123,6 @@ void loop() {
           digitalWrite(REEL_MOTOR_AI1, LOW); 
           digitalWrite(REEL_MOTOR_AI2, HIGH); 
           if(reelTime >= REEL_TIME_MAX){
-//            Serial.println("switch to true");
             lineReelDown == true;
           }else{
             digitalWrite(REEL_MOTOR_STBY, LOW);
@@ -134,13 +132,6 @@ void loop() {
 
         rodRotator.write(90);
         rodFwdBk.write(90);
-
-//        Serial.flush();
-        byte keystroke;
-        if(Serial.available() > 0){
-//          gameState = PLAYMODE;
-//          gameTime = millis();
-        }
       }
       break;
     default:
@@ -149,7 +140,7 @@ void loop() {
         delay(10);
       }
   }
-  delay(10);
+  delay(20);
 }
 
 void printToSerial(int r, int g, int b, int force){
@@ -167,6 +158,10 @@ void printToSerial(int r, int g, int b, int force){
   Serial.print("W");
   Serial.print(force);
   Serial.print("W");
+  Serial.print("T");
+  unsigned int currentTime = (millis() - gameStartTime)/1000;
+  Serial.print(currentTime);
+  Serial.print("T");
   Serial.println("&");
 }
 
@@ -194,7 +189,7 @@ void ReelController(){
   }
 
   if(lineReelDown == true && reelTime < REEL_TIME_MAX){
-//    Serial.println("reelingDown");
+
     reelTime++;
     
     //Spin Clockwise at speed 150
@@ -203,12 +198,11 @@ void ReelController(){
     digitalWrite(REEL_MOTOR_AI1, HIGH); 
     digitalWrite(REEL_MOTOR_AI2, LOW); 
     if(reelTime >= REEL_TIME_MAX){
-//      Serial.println("switch to false");
       lineReelDown == false;
     }
   }
   else if(lineReelDown == false && reelTime < REEL_TIME_MAX){
-//    Serial.println("reelinscmhnv hbdfmvbdfkjbvgUp");
+    
     reelTime++;
     
     //Spin Counter-Clockwise at speed 150
@@ -217,7 +211,6 @@ void ReelController(){
     digitalWrite(REEL_MOTOR_AI1, LOW); 
     digitalWrite(REEL_MOTOR_AI2, HIGH); 
     if(reelTime >= REEL_TIME_MAX){
-//      Serial.println("switch to true");
       lineReelDown == true;
     }
   }else{
