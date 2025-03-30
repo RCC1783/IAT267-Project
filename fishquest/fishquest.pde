@@ -189,7 +189,6 @@ void ifWin() {
   void checkBuffer()
   {
     println("checking buffer");
-    println(myPort.read());
     if (myPort.available() > 0) 
     {
       myPort.readBytesUntil('&', inBuffer);
