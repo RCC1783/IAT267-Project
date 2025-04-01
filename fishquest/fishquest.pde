@@ -38,6 +38,10 @@ int score = 0;                // Player score
 int timeCountDown = 10 * 60;  // Start count down after the game ends and starts the game again
 int numberFish = 5;           // Number of the fish
 
+int weighTime = millis();
+int weighTimeMax = 3000;
+int weighTimeStart = 0;
+
 void setup()
 {
   size(1000, 716);
@@ -244,17 +248,19 @@ void ifWin() {
         case PLAYMODE :
         int s = 0;
         println("case: playmode");
-        println("weight: " + w[0]);
+        if (millis() >= weighTimeStart + weighTimeMax) {
+        int weight = Integer.parseInt(w[0]);
+        println("weight: " + weight);
           // Check info received about fish
-          if (Integer.parseInt(w[0]) >= weightL && Integer.parseInt(w[0]) < weightM) 
+          if (weight >= weightL && weight < weightM) 
           {
             s += 1;
           }
-          else if (Integer.parseInt(w[0]) >= weightM && Integer.parseInt(w[0]) < weightL)
+          else if (weight >= weightM && weight < weightL)
           {
             s += 2;
           }
-          else if (Integer.parseInt(w[0]) >= weightL)
+          else if (weight >= weightL)
           {
             s += 3;
           }  
@@ -264,6 +270,7 @@ void ifWin() {
           }  
           score += s;
           // TO DO : add score increase based on color
+          }
         break;
         
         case GAME_END :
