@@ -22,6 +22,7 @@ int weightM;           // middle weight bound
 int tweightU;          // Upper weight bound
 
 StartScreen ss;
+StartScreen ssDaylight;
 CountBackground cbg;
 CountBackground daylightCbg;
 Intro in;
@@ -29,6 +30,7 @@ Minim minim;
 AudioPlayer backSound, click;
 
 boolean spacePressed = false;
+boolean isDaylight = false;
 ArrayList<Fish> fish = new ArrayList<Fish>();
 
 ArrayList<Fish> yellowFish = new ArrayList<Fish>();
@@ -85,6 +87,12 @@ void setup()
 }
 
 void draw(){
+  //spacePressed is used as an alternative condition for light sensor
+   if (spacePressed) {
+    isDaylight = true;
+  } else {
+    isDaylight = false;
+  }
   
   println(gameState);
   switch (gameState)

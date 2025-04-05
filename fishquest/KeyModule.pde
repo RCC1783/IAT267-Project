@@ -21,6 +21,6 @@ void mouseClicked()
 
 void keyPressed () {
   if ( key == ' ') {
-    spacePressed = false;
+    spacePressed = true;
   }
 }
