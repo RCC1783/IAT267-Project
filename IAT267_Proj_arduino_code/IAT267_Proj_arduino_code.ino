@@ -3,7 +3,7 @@
 #include <Servo.h>
 #include <ColorPAL.h>
 
-enum analogInPins {ROT_SENSOR_IN = A0, FWD_BCK_SLIDER_IN = A1, WGHT_SENSOR_IN = A2};
+enum analogInPins {ROT_SENSOR_IN = A0, FWD_BCK_SLIDER_IN = A1, WGHT_SENSOR_IN = A2, LGHT_SENSOR_IN = A3};
 enum analogOutPins {ROD_ROTATOR_OUT = 11, ROD_MOVER_OUT = 10};
 
 
@@ -16,8 +16,6 @@ const int REEL_MOTOR_AI1 = 4; //direction control 1 (digital)
 const int REEL_MOTOR_AI2 = 7; //direction control 2 (digital)
 const int REEL_MOTOR_STBY = 8; //standby mode control (digital)
 const int REEL_MOTOR_PWMA = 3; //speed of motor (analog)
-
-// CR##G##B##CW###W&
 
 Servo rodRotator;
 Servo rodFwdBk;
@@ -48,7 +46,7 @@ void setup() {
   rodRotator.attach(ROD_ROTATOR_OUT);
   rodFwdBk.attach(ROD_MOVER_OUT);
 
-//  clrSensor.attachPAL(CLR_SENSOR_IN);
+  clrSensor.attachPAL(CLR_SENSOR_IN);
 
   pinMode(REEL_BUTTON_PIN, INPUT);
   pinMode(REEL_MOTOR_AI1, OUTPUT);
@@ -61,19 +59,10 @@ void setup() {
 
 void loop() {
   if(buttonInputTimer > 0){buttonInputTimer -= 1;}
-//  if(Serial.available() > 0){
-//    gameState = Serial.parseInt();
-//    while(Serial.available() > 0){
-//      Serial.read();
-//    }
-//  }
   switch (gameState){
     case GAME_TITLE:
         Serial.println("TITLE");
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer <= 0){
-//          Serial.println("&");
-//          Serial.print(INSTRUCTION);
-//          Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
           gameState = INSTRUCTION;
           delay(20);
@@ -81,10 +70,8 @@ void loop() {
       break;
     case INSTRUCTION: //Instruction
         Serial.println("INSTRUCTION");
+        Serial.println(REEL_BUTTON_PIN);
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer <= 0){
-//          Serial.println("&");
-//          Serial.print(PLAYMODE);
-//          Serial.println("&");
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
           gameState = PLAYMODE;
           gameStartTime = millis();
@@ -95,23 +82,36 @@ void loop() {
       {
         if(millis() >= gameStartTime + gameTimeMax){
           gameState = GAME_END; 
+          gameStartTime = millis();
+          gameTimeMax = 10000;
         }
-        int force = analogRead(WGHT_SENSOR_IN);
         
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));
         rodFwdBk.write(AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
   
         ReelController();
 
+        // Gets all colour data
         int r = clrSensor.redPAL();
         int g = clrSensor.greenPAL();
         int b = clrSensor.bluePAL();
 
-        printToSerial(r, g, b, force);
+        //Gets light sensor data (set up so higher val = darker)
+        int light = analogRead(LGHT_SENSOR_IN);
+
+        // Gets Force data (currently unused)
+        int force = analogRead(WGHT_SENSOR_IN);
+
+        printToSerial(r, g, b, light, force);
       }
       break;
     case GAME_END:
       {
+        if(millis() >= gameStartTime + gameTimeMax){
+          gameState = GAME_TITLE; 
+          gameTimeMax = 60000;
+        }
+        
         Serial.println("end");
         // raise the line back up
         if(lineReelDown == false && reelTime < REEL_TIME_MAX){
@@ -143,31 +143,39 @@ void loop() {
   delay(20);
 }
 
-void printToSerial(int r, int g, int b, int force){
+void printToSerial(int r, int g, int b, int light, int force){
   Serial.print("C");
-  Serial.print("R");
-  Serial.print(r);
-  Serial.print("R");
-  Serial.print("G");
-  Serial.print(g);
-  Serial.print("G");
-  Serial.print("B");
-  Serial.print(b);
-  Serial.print("B");
+    Serial.print("R");
+    Serial.print(r);
+    Serial.print("R");
+    
+    Serial.print("G");
+    Serial.print(g);
+    Serial.print("G");
+    
+    Serial.print("B");
+    Serial.print(b);
+    Serial.print("B");
   Serial.print("C");
+  
+  Serial.print("L");
+    Serial.print(light);
+  Serial.print("L");
+  
   Serial.print("W");
-  Serial.print(force);
+    Serial.print(force);
   Serial.print("W");
+  
   Serial.print("T");
-  unsigned int currentTime = (millis() - gameStartTime)/1000;
-  Serial.print(currentTime);
+    unsigned int currentTime = (millis() - gameStartTime)/1000;
+    Serial.print(currentTime);
   Serial.print("T");
+  
   Serial.println("&");
 }
 
 int AnalogInToDegrees180(int analogIn){
   int rotVal = analogRead(analogIn);
-//  Serial.println(rotVal);
   if(analogIn == ROT_SENSOR_IN){
     rotVal = map(rotVal, 200, 1023, 0, 180);
   }else{
