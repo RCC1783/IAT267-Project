@@ -131,6 +131,9 @@ void checkBuffer()
       f = splitTokens(myString, "&");
       c = splitTokens(f[0], "C"); // Convert string value to integer (color)
       w = splitTokens(f[0], "W"); // Convert string value to integer
+      r = splitTokens(c[0], "R"); // Grab RED color value
+      g = splitTokens(c[0], "G"); // Grab GREEN color value
+      b = splitTokens(c[0], "B"); // Grab BLUE color value
     }
     switch (gameState) 
     {
@@ -178,7 +181,15 @@ void checkBuffer()
         
       int weight = Integer.parseInt(w[0]);
       int colorr = Integer.parseInt(c[0]);
-      
+
+// Checking Color
+        println("color: " +Integer.parseInt(r[0])+ ", " +Integer.parseInt(g[0])+ ", " +Integer.parseInt(b[0]));
+        //  if ((Integer.parseInt(r[0]) < gameR + int && Integer.parseInt(r[0]) > gameR - int) &&
+        //      (Integer.parseInt(g[0]) < gameG + int && Integer.parseInt(g[0]) > gameG - int) &&
+        //      (Integer.parseInt(b[0]) < gameB + int && Integer.parseInt(b[0]) > gameB - int) ) { 
+        //      s += 3; 
+        //  } else {s+=1;}
+
       if(colorr == num) {
         score += 2;
       }
