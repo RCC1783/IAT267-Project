@@ -4,7 +4,7 @@ import ddf.minim.*;
 Serial myPort; // serial port object
 
 String[] portList = Serial.list();
-final int PORT_NUM = 0;
+final int PORT_NUM = 2;
 //PortHandler portHandler;
 
 final int GAME_TITLE = 0;
@@ -28,8 +28,6 @@ PImage winFishImg;
 PImage bg;
 
 int gameState = GAME_TITLE;   // Begin gamestate at game title screen
-int gameTimeMax = 10000;      // Max play time in ms
-int gameTimeStart = 0;        // Time of game start
 int time = 0;                 // Time remaining
 int score = 0;                // Player score
 int timeCountDown = 10 * 60;  // Start count down after the game ends and starts the game again
@@ -58,7 +56,7 @@ void setup()
   println(Serial.list());
   myPort = new Serial (this, Serial.list()[PORT_NUM], 9600);
   //portHandler = new PortHandler();
-      inBuffer = new byte[255];
+  inBuffer = new byte[255];
     
     // TO DO : Change to values reflecting actual weight
     weightL = 10; 
@@ -68,13 +66,12 @@ void setup()
 
 void draw(){
   //spacePressed is used as an alternative condition for light sensor
-   if (spacePressed) {
-    isDaylight = true;
-  } else {
-    isDaylight = false;
-  }
+  // if (spacePressed) {
+  //  isDaylight = true;
+  //} else {
+  //  isDaylight = false;
+  //}
   
-  println(gameState);
   switch (gameState)
   {
   case GAME_TITLE : 
@@ -83,7 +80,7 @@ void draw(){
 
   case GAMEINSTRUCTION :
     displayHowToPlayScreen();
-    gameTimeStart = millis();
+    //gameTimeStart = millis();
     break;
 
   case PLAYMODE :

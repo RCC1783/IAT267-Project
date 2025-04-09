@@ -36,7 +36,7 @@ const int INSTRUCTION = 3;
 
 unsigned int gameState = 0;
 
-unsigned long gameTimeMax = 60000; //1 minute
+unsigned long gameTimeMax = 10000; //1 minute
 unsigned long gameStartTime = 0;
 
 void setup() {
@@ -46,7 +46,7 @@ void setup() {
   rodRotator.attach(ROD_ROTATOR_OUT);
   rodFwdBk.attach(ROD_MOVER_OUT);
 
-  clrSensor.attachPAL(CLR_SENSOR_IN);
+//  clrSensor.attachPAL(CLR_SENSOR_IN);
 
   pinMode(REEL_BUTTON_PIN, INPUT);
   pinMode(REEL_MOTOR_AI1, OUTPUT);
@@ -61,30 +61,27 @@ void loop() {
   if(buttonInputTimer > 0){buttonInputTimer -= 1;}
   switch (gameState){
     case GAME_TITLE:
-        Serial.println("TITLE");
+//        Serial.println("TITLE");
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer <= 0){
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
           gameState = INSTRUCTION;
+          Serial.println("3&");
           delay(20);
         }
       break;
     case INSTRUCTION: //Instruction
-        Serial.println("INSTRUCTION");
-        Serial.println(REEL_BUTTON_PIN);
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer <= 0){
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
           gameState = PLAYMODE;
           gameStartTime = millis();
+          
+          Serial.println("1&");
           delay(20);
         }
         break;
     case PLAYMODE:
       {
-        if(millis() >= gameStartTime + gameTimeMax){
-          gameState = GAME_END; 
-          gameStartTime = millis();
-          gameTimeMax = 10000;
-        }
+        delay(10);
         
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));
         rodFwdBk.write(AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
@@ -110,9 +107,11 @@ void loop() {
         if(millis() >= gameStartTime + gameTimeMax){
           gameState = GAME_TITLE; 
           gameTimeMax = 60000;
+          Serial.println("0&");
+          break;
         }
         
-        Serial.println("end");
+//        Serial.println("end");
         // raise the line back up
         if(lineReelDown == false && reelTime < REEL_TIME_MAX){
           reelTime++;
@@ -144,19 +143,26 @@ void loop() {
 }
 
 void printToSerial(int r, int g, int b, int light, int force){
-  Serial.print("C");
-    Serial.print("R");
-    Serial.print(r);
-    Serial.print("R");
+  if(millis() >= gameStartTime + gameTimeMax){
+    gameState = GAME_END; 
+    gameStartTime = millis();
+    gameTimeMax = 10000;
+//          Serial.flush();
+    Serial.println("2&");
+    delay(20);
+    return;
+  }
+  Serial.print("R");
+  Serial.print(r);
+  Serial.print("R");
     
-    Serial.print("G");
-    Serial.print(g);
-    Serial.print("G");
+  Serial.print("G");
+  Serial.print(g);
+  Serial.print("G");
     
-    Serial.print("B");
-    Serial.print(b);
-    Serial.print("B");
-  Serial.print("C");
+  Serial.print("B");
+  Serial.print(b);
+  Serial.print("B");
   
   Serial.print("L");
     Serial.print(light);
@@ -167,11 +173,12 @@ void printToSerial(int r, int g, int b, int light, int force){
   Serial.print("W");
   
   Serial.print("T");
-    unsigned int currentTime = (millis() - gameStartTime)/1000;
-    Serial.print(currentTime);
+    unsigned int currentTime = (millis() - gameStartTime);
+    Serial.print((gameTimeMax - currentTime)/1000);
   Serial.print("T");
   
-  Serial.println("&");
+  Serial.print("&");
+  Serial.println();
 }
 
 int AnalogInToDegrees180(int analogIn){

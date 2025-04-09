@@ -1,3 +1,6 @@
+int fishTimer = 0;
+final int FISH_TIMER_MAX = 10 * 60;
+
 void gameTitle()
 {
   //background(0);
@@ -11,17 +14,18 @@ void gameTitle()
 //hello world
 void playMode(){
   println("play mode"); 
+  
+  fishTimer++;
+  
   dayNightBg();
   
-  text("" + (gameTimeMax - time)/1000, width/2, height/4);  // Show time remaining in seconds
+  text(time, width/2, height/4);  // Show time remaining in seconds
   text("" + score, width/2, height/2);                      // Show score in screen centre
   
-  time = millis() - gameTimeStart;          // total time in play mode
-  if (time >= gameTimeMax)
-  {
-    gameState = GAME_END;
+  if(fishTimer >= FISH_TIMER_MAX){
+    ChangeFishColour();
+    fishTimer = 0;
   }
-  
   spawnFishForCountBg();
   checkBuffer();
 }
@@ -41,7 +45,7 @@ void gameEnd()
     text("Your score is " + score, width/3+30, height/4+60);
   }
   //text(score, width/2, height/2);
-  reStart();
+  //reStart();
   checkBuffer();
 }
 
@@ -50,7 +54,7 @@ void reStart() {
   scroll = 0;
   scrollrate = 4;
   spacePressed = false;
-  isDaylight = false;
+  //isDaylight = false;
   text("Going back to the main screen in " + timeCountDown/50, width/3-80, height/2+ 100);
   text("Click on screen to go back now", width/3-50, height/2 + 150);
   if (timeCountDown <= 0) {
@@ -71,13 +75,13 @@ void dayNightBg () {
     //draw daylight background
     image(daylightCbg.img, scroll, 0, width, height);
     image(daylightCbg.img, scroll + daylightCbg.img.width, 0, width, height);
-    isDaylight = false;
+    //isDaylight = false;
   } else{
     //draw normal background
     image(bg, 0,0,1000,716);
     image(cbg.img, scroll, 0, width, height);
     image(cbg.img, scroll + cbg.img.width, 0, width, height);
-    isDaylight = true;
+    //isDaylight = true;
   }
   if (frameCount % 180 == 0) {  // 180 frames = 3 seconds at 60 FPS
       scrollrate *= 1.2;  // Increase speed
@@ -97,7 +101,7 @@ void displayStartScreen() {
     textSize(40);
     text("Click on screen to Start", width/3, height/2+300);
     popStyle();  
-    isDaylight = false;
+    //isDaylight = false;
   } else {
     ss.drawMe();
     spawnFish();
@@ -105,7 +109,7 @@ void displayStartScreen() {
     text("Welcome", width/2-150, height/2); // Display Title screen
     textSize(40);
     text("Click on screen to Start", width/3, height/2+300);  
-    isDaylight = true;
+    //isDaylight = true;
   }
   
 }
