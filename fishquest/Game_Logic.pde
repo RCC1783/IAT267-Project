@@ -56,11 +56,11 @@ void reStart() {
   spacePressed = false;
   //isDaylight = false;
   text("Going back to the main screen in " + timeCountDown/50, width/3-80, height/2+ 100);
-  text("Click on screen to go back now", width/3-50, height/2 + 150);
-  if (timeCountDown <= 0) {
-    gameState = GAME_TITLE;
-    timeCountDown = 10 *60;
-  }
+  //text("Click on screen to go back now", width/3-50, height/2 + 150);
+  //if (timeCountDown <= 0) {
+  //  gameState = GAME_TITLE;
+  //  timeCountDown = 10 *60;
+  //}
 }
 
 void dayNightBg () {
@@ -99,7 +99,7 @@ void displayStartScreen() {
     fill(249, 168, 201);
     text("Welcome", width/2-150, height/2); // Display Title screen
     textSize(40);
-    text("Click on screen to Start", width/3, height/2+300);
+    text("Click button to Start", width/3, height/2+300);
     popStyle();  
     //isDaylight = false;
   } else {
@@ -108,7 +108,7 @@ void displayStartScreen() {
     textSize(100);   
     text("Welcome", width/2-150, height/2); // Display Title screen
     textSize(40);
-    text("Click on screen to Start", width/3, height/2+300);  
+    text("Click button to Start", width/3, height/2+300);  
     //isDaylight = true;
   }
   
@@ -116,10 +116,10 @@ void displayStartScreen() {
 
 void displayHowToPlayScreen() {
   in.drawMe();
-  textSize(40);
-  text("This game is about ... ", width/8, height/2-80);
-  text("Click on screen to start timer ", width/8, height/2);
   spawnFish();
+  textSize(40);
+  text("FISH! Use the controls to catch fish that match \nthe colour of the swiming ones!", width/8, height/2-80);
+  text("Click the button to cast your line!", width/8, height/2 + 50);
   checkBuffer();
 }
 
@@ -177,11 +177,11 @@ void spawnFish() {
 
 void spawnFishForCountBg() {
   ArrayList<Fish> selectedFishList = null;
-  if (num == 1) selectedFishList = yellowFish;
-  else if (num == 2) selectedFishList = greenFish;
-  else if (num == 3) selectedFishList = redFish;
+  if (num == 0) selectedFishList = redFish;
+  else if (num == 1) selectedFishList = greenFish;
+  else if (num == 2) selectedFishList = yellowFish;
+  else if (num == 3) selectedFishList = blackFish;
   else if (num == 4) selectedFishList = whiteFish;
-  else if (num == 5) selectedFishList = blackFish;
 
   if (selectedFishList != null) {
     for (int i = 0; i < selectedFishList.size(); i++) {

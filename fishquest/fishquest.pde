@@ -94,7 +94,7 @@ void draw(){
 }
 
 void ChangeFishColour(){
-  num = int(random(4));
+  num = int(random(5));
   
   switch(num){
     case RED:
