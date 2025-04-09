@@ -2,10 +2,7 @@ void gameTitle()
 {
   //background(0);
   println("game title");
-  num = int(random(1,6));
   
- 
-    
   displayStartScreen();
   score = 0;
   checkBuffer();
@@ -123,24 +120,24 @@ void displayHowToPlayScreen() {
 }
 
 void loadAssets() {
-  cbg = new CountBackground(loadImage("countbackground.png"));
-  bg = loadImage("background.png");
-  daylightCbg = new CountBackground (loadImage("daylightbackground.png"));
+  cbg = new CountBackground(loadImage("data/countbackground.png"));
+  bg = loadImage("data/background.png");
+  daylightCbg = new CountBackground (loadImage("data/daylightbackground.png"));
   
-  fishImg = loadImage("fish.png");
-  greenFishImg = loadImage("greenFish.png");
-  redFishImg = loadImage("redFish.png");
-  whiteFishImg = loadImage("whiteFish.png");
-  blackFishImg = loadImage("blackFish.png");
-  deadFishImg = loadImage("dead.png");
-  winFishImg = loadImage("winFish.png");
-  ss = new StartScreen(loadImage("start.png"));
-  ssDaylight = new StartScreen (loadImage("daylightBgGameTitle.png"));
-  in = new Intro(loadImage("intro.png"));
+  fishImg = loadImage("data/fish.png");
+  greenFishImg = loadImage("data/greenFish.png");
+  redFishImg = loadImage("data/redFish.png");
+  whiteFishImg = loadImage("data/whiteFish.png");
+  blackFishImg = loadImage("data/blackFish.png");
+  deadFishImg = loadImage("data/dead.png");
+  winFishImg = loadImage("data/winFish.png");
+  ss = new StartScreen(loadImage("data/start.png"));
+  ssDaylight = new StartScreen (loadImage("data/daylightBgGameTitle.png"));
+  in = new Intro(loadImage("data/intro.png"));
   minim = new Minim(this);
-  backSound = minim.loadFile("backSound.mp3");
+  backSound = minim.loadFile("data/backSound.mp3");
   backSound.loop();
-  click = minim.loadFile("click.mp3");
+  click = minim.loadFile("data/click.mp3");
   
   for (int i = 0; i < numberFish; i ++) {
     fish.add(new Fish(new PVector(random(width), random(50, 650)), new PVector(random(-6, -1), 0), fishImg, random(1, 3)));

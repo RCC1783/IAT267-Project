@@ -1,3 +1,19 @@
+ArrayList<Fish> fish = new ArrayList<Fish>();
+
+ArrayList<Fish> yellowFish = new ArrayList<Fish>();
+ArrayList<Fish> redFish = new ArrayList<Fish>();
+ArrayList<Fish> greenFish = new ArrayList<Fish>();
+ArrayList<Fish> blackFish = new ArrayList<Fish>();
+ArrayList<Fish> whiteFish = new ArrayList<Fish>();
+
+PImage fishImg;
+
+PImage yellowFishImg;
+PImage redFishImg;
+PImage greenFishImg;
+PImage blackFishImg;
+PImage whiteFishImg;
+
 class Fish {
   PImage img;
   PVector pos, vel;

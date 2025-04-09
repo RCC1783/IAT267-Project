@@ -177,7 +177,7 @@ void printToSerial(int r, int g, int b, int light, int force){
 int AnalogInToDegrees180(int analogIn){
   int rotVal = analogRead(analogIn);
   if(analogIn == ROT_SENSOR_IN){
-    rotVal = map(rotVal, 200, 1023, 0, 180);
+    rotVal = map(rotVal, 200, 1023, 30, 120);
   }else{
     rotVal = map(rotVal, 0, 1023, 0, 180);
   }
