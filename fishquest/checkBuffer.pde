@@ -12,9 +12,17 @@ String[] l;             // light val
 String[] w;            // fish weight
 String[] t;            // time
 
+int fishCheckDelay = 120;
+final int FISH_CHECK_DELAY = 120;
+
 void checkBuffer()
 {
   println("checking buffer");
+  
+  if(fishCheckDelay < 120){
+    fishCheckDelay++;
+  }
+  
   if (myPort.available() > 0) 
   {
     myPort.readBytesUntil('&', inBuffer);
@@ -98,17 +106,22 @@ void checkBuffer()
         //int weight = Integer.parseInt(w[1]);
   
   // Checking Color
-        int diff = 20;
+        int diff = 40;
         int rIndex = 0;
         if(r.length > 2) {rIndex = 1;} // WHEN I MAKE THE INDEX 1 ITS 0 WHEN I MAKE IT 0 ITS 1 AHHHHHHHHHHH
         //println("color: " +Integer.parseInt(r[0])+ ", " +Integer.parseInt(g[1])+ ", " + Integer.parseInt(b[1]));
-            if ((Integer.parseInt(r[rIndex]) < gameR + diff && Integer.parseInt(r[rIndex]) > gameR - diff) &&
+            if (fishCheckDelay == FISH_CHECK_DELAY && (Integer.parseInt(r[rIndex]) < gameR + diff && Integer.parseInt(r[rIndex]) > gameR - diff) &&
                 (Integer.parseInt(g[1]) < gameG + diff && Integer.parseInt(g[1]) > gameG - diff) &&
                 (Integer.parseInt(b[1]) < gameB + diff && Integer.parseInt(b[1]) > gameB - diff) ) { 
                   s += 3; 
                   ChangeFishColour();
                   fishTimer = 0;
-            }
+                  fishCheckDelay = 0;
+            }else if (fishCheckDelay == FISH_CHECK_DELAY && (Integer.parseInt(r[rIndex]) > 5) && (Integer.parseInt(g[1]) > 5) &&
+                      (Integer.parseInt(b[1]) > 5)) {
+                  s += 1;
+                  fishCheckDelay = 0;
+              }
   
         //if(colorr == num) {
         //  score += 2;
@@ -135,7 +148,7 @@ void checkBuffer()
         //  {
         //    println("No change to score from weight");
         //  }  
-        //  score += s;
+          score += s;
         //  // TO DO : add score increase based on color
           }
       }

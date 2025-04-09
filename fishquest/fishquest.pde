@@ -108,14 +108,14 @@ void ChangeFishColour(){
       gameB = 75;
       break;
     case YELLOW:
-      gameR = 250;
-      gameG = 135;
-      gameB = 65;
+      gameR = 200;
+      gameG = 125;
+      gameB = 35;
       break;
     case BLACK:
-      gameR = 255;
-      gameG = 0;
-      gameB = 0;
+      gameR = 30;
+      gameG = 25;
+      gameB = 35;
       break;
     case WHITE:
       gameR = 255;

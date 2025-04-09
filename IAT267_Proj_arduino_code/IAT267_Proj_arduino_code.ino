@@ -36,7 +36,7 @@ const int INSTRUCTION = 3;
 
 unsigned int gameState = 0;
 
-unsigned long gameTimeMax = 10000; //1 minute
+unsigned long gameTimeMax = 60000; //1 minute
 unsigned long gameStartTime = 0;
 
 void setup() {
@@ -46,7 +46,7 @@ void setup() {
   rodRotator.attach(ROD_ROTATOR_OUT);
   rodFwdBk.attach(ROD_MOVER_OUT);
 
-//  clrSensor.attachPAL(CLR_SENSOR_IN);
+  clrSensor.attachPAL(CLR_SENSOR_IN);
 
   pinMode(REEL_BUTTON_PIN, INPUT);
   pinMode(REEL_MOTOR_AI1, OUTPUT);
@@ -61,7 +61,6 @@ void loop() {
   if(buttonInputTimer > 0){buttonInputTimer -= 1;}
   switch (gameState){
     case GAME_TITLE:
-//        Serial.println("TITLE");
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer <= 0){
           buttonInputTimer = BUTTON_INPUT_TIMER_DELAY_MAX;
           gameState = INSTRUCTION;
