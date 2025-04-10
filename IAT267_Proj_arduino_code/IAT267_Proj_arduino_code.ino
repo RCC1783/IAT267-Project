@@ -96,7 +96,7 @@ void loop() {
         
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));
         
-        rodFwdBk_L.write(180 - AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
+        rodFwdBk_L.write(180 - AnalogInToDegrees180(FWD_BCK_SLIDER_IN)); 
         rodFwdBk_R.write(AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
   
         ReelController();

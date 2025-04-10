@@ -121,7 +121,7 @@ void checkBuffer()
                       (Integer.parseInt(b[1]) > 5)) {
                   s += 1;
                   fishCheckDelay = 0;
-              }
+              } 
   
         //if(colorr == num) {
         //  score += 2;
