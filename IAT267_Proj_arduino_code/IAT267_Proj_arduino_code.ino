@@ -4,21 +4,24 @@
 #include <ColorPAL.h>
 
 enum analogInPins {ROT_SENSOR_IN = A0, FWD_BCK_SLIDER_IN = A1, WGHT_SENSOR_IN = A2, LGHT_SENSOR_IN = A3};
-enum analogOutPins {ROD_ROTATOR_OUT = 11, ROD_MOVER_OUT = 10};
+enum analogOutPins {ROD_ROTATOR_OUT = 11, ROD_MOVER_OUT_L = 10, ROD_MOVER_OUT_R = 9};
 
 
 //Digital 
 const int REEL_BUTTON_PIN = 2; //reel in/out button (digital)
+const int RED_LED = 5;
+const int GREEN_LED = 6;
 const int CLR_SENSOR_IN = 12;
 
 //Pins for the DC motor
+const int REEL_MOTOR_PWMA = 3; //speed of motor (analog)
 const int REEL_MOTOR_AI1 = 4; //direction control 1 (digital)
 const int REEL_MOTOR_AI2 = 7; //direction control 2 (digital)
 const int REEL_MOTOR_STBY = 8; //standby mode control (digital)
-const int REEL_MOTOR_PWMA = 3; //speed of motor (analog)
 
 Servo rodRotator;
-Servo rodFwdBk;
+Servo rodFwdBk_L;
+Servo rodFwdBk_R;
 
 ColorPAL clrSensor;
 
@@ -44,7 +47,8 @@ void setup() {
   while(!Serial){;}
 
   rodRotator.attach(ROD_ROTATOR_OUT);
-  rodFwdBk.attach(ROD_MOVER_OUT);
+  rodFwdBk_L.attach(ROD_MOVER_OUT_L);
+  rodFwdBk_R.attach(ROD_MOVER_OUT_R);
 
   clrSensor.attachPAL(CLR_SENSOR_IN);
 
@@ -54,11 +58,19 @@ void setup() {
   pinMode(REEL_MOTOR_STBY, OUTPUT);
 
   rodRotator.write(90);
-  rodFwdBk.write(90);
+  rodFwdBk_L.write(90);
+  rodFwdBk_R.write(90);
 }
 
 void loop() {
-  if(buttonInputTimer > 0){buttonInputTimer -= 1;}
+  if(buttonInputTimer > 0){
+    buttonInputTimer -= 1;
+    digitalWrite(RED_LED, HIGH);
+    digitalWrite(GREEN_LED, LOW);
+  }else{
+    digitalWrite(RED_LED, LOW);
+    digitalWrite(GREEN_LED, HIGH);
+  }
   switch (gameState){
     case GAME_TITLE:
         if(digitalRead(REEL_BUTTON_PIN) == HIGH && buttonInputTimer <= 0){
@@ -83,7 +95,9 @@ void loop() {
         delay(10);
         
         rodRotator.write(AnalogInToDegrees180(ROT_SENSOR_IN));
-        rodFwdBk.write(AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
+        
+        rodFwdBk_L.write(180 - AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
+        rodFwdBk_R.write(AnalogInToDegrees180(FWD_BCK_SLIDER_IN));
   
         ReelController();
 
@@ -129,7 +143,8 @@ void loop() {
         }
 
         rodRotator.write(90);
-        rodFwdBk.write(90);
+        rodFwdBk_L.write(90);
+        rodFwdBk_R.write(90);
       }
       break;
     default:
