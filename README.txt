@@ -1,4 +1,4 @@
-## Fishquest
+# Fishquest
 Fishquest is an arcade inspired fishing game created over the course of a semester for Introduction to Technological Systems at Simon Fraser University. The goal of Fishquest is to control a crane like fishing apparatus to catch magnetic fish and score points using physical sensors. Additionally, bonus points can be obtained by catching fish with the correct colour.
 
 ### Code
