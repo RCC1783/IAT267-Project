@@ -3,7 +3,8 @@ Fishquest is an arcade inspired fishing game created over the course of a semest
 
 ### Code
 Fishquest was built using Processing and Arduino. The processing application makes up the bulk of the codebase, receiving and interpreting the data sent by the microcontroller in order to implement visuals, UI, and make the game element of fishquest function. The Arduino code takes in input from sensors and controls the physical outputs as well as the state of the system and processing application with game-states and the microcontroller's internal clock.
-> [!NOTE] The processing application only receives data and interprets it, it does not send any data to the microcontroller
+> [!NOTE]
+> The processing application only receives data and interprets it, it does not send any data to the microcontroller
 
 ### Components
 Fishquest was made using the following sensors and actuators:
